@@ -18,7 +18,7 @@ class ElectricGraphGetX extends GetxController {
   var usage;
   var charge;
   var statusData;
-  bool isSwitched = false;
+  var isSwitched = false;
   Map<String, dynamic> usageData;
   var campId;
   var deviceId;

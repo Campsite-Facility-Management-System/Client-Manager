@@ -3,17 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ElectricInfoScreen extends StatefulWidget {
-  @override
-  ElectricInfoScreenState createState() => ElectricInfoScreenState();
-}
-
-class ElectricInfoScreenState extends State<ElectricInfoScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class ElectricInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ElectricGraphGetX());
@@ -78,16 +68,17 @@ class ElectricInfoScreenState extends State<ElectricInfoScreen> {
                             Container(
                               child: Transform.scale(
                                 scale: 4.0,
-                                child: Switch(
-                                  value: controller.isSwitched,
-                                  activeColor: Colors.green,
-                                  activeTrackColor: Colors.lightGreen,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      controller.isSwitched = value;
-
-                                      controller.apichangeStatus();
-                                    });
+                                child: GetBuilder<ElectricGraphGetX>(
+                                  builder: (_) {
+                                    return Switch(
+                                      value: controller.isSwitched,
+                                      activeColor: Colors.green,
+                                      activeTrackColor: Colors.lightGreen,
+                                      onChanged: (value) {
+                                        controller.isSwitched = value;
+                                        controller.apichangeStatus();
+                                      },
+                                    );
                                   },
                                 ),
                               ),

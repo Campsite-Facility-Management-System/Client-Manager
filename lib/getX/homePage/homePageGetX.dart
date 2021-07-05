@@ -1,4 +1,3 @@
-import 'package:client_manager/container/homePage/model/campData.dart';
 import 'package:client_manager/container/homePage/model/myInfo.dart';
 import 'package:client_manager/function/env.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

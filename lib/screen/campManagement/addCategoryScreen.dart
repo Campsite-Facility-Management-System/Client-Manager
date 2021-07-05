@@ -1,9 +1,10 @@
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/function/addPicture.dart';
-import 'package:client_manager/provider/idCollector.dart';
+import 'package:client_manager/getX/campManagement/campDetailGetX.dart';
 import 'package:client_manager/screen/campManagement/campDetailScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -36,13 +37,12 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
     var url = Env.url + '/api/category/manager/add';
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
+    final campDetailController = Get.put(CampDetailGetX());
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.headers.addAll({'Authorization': myToken});
     request.fields.addAll({
-      'campsite_id': Provider.of<IdCollector>(context, listen: true)
-          .selectedCampId
-          .toString(),
+      'campsite_id': campDetailController.selectedCampId,
       'name': _name.text,
       'price': _price.text,
       'description': _description.text,
@@ -58,13 +58,8 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
             .add(await http.MultipartFile.fromPath('img[]', imageList[i]));
       }
     }
-    var response = await request.send();
-    // print(request.headers);
-    // print(request.fields);
-    // print(request.files);
 
-    // print(response.statusCode);
-    // print(await response.stream.bytesToString());
+    var response = await request.send();
     if (response.statusCode == 200) {
       print("success");
       Navigator.push(
