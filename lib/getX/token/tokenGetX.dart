@@ -90,11 +90,7 @@ class TokenGetX extends GetxController {
       'Authorization': myToken,
     });
 
-    // print('tokenTest(myToken): ' + myToken);
-    // print('tokenTest(response.body): ' + response.body);
-
     var data = jsonDecode(response.body);
-    // print(data['status']);
 
     if (data['message'] == 'Successfully logged out') {
       tokenDelete();
@@ -120,6 +116,11 @@ class TokenGetX extends GetxController {
       SystemNavigator.pop();
       return true;
     }
+  }
+
+  pop() {
+    Get.back();
+    return true;
   }
 
   void flutterToast() async {

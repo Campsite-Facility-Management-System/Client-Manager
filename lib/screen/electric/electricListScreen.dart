@@ -28,7 +28,6 @@ class ElectricListScreenState extends State<ElectricListScreen> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ElectricInfoGetX());
-    final detailController = Get.put(ElectricGraphGetX());
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -70,15 +69,16 @@ class ElectricListScreenState extends State<ElectricListScreen> {
                       Container(
                         height: 650,
                         margin: EdgeInsets.only(left: 10, right: 10),
-                        child: ListView.builder(
-                          // shrinkWrap: true,
-                          itemCount: controller.detailData == null
-                              ? 0
-                              : controller.detailData?.length,
-                          itemBuilder: (context, index) {
-                            return ElectricCategoryTile.buildTile(
-                                context, controller.detailData[index]);
-                          },
+                        child: Obx(
+                          () => ListView.builder(
+                            itemCount: controller.detailData == null
+                                ? 0
+                                : controller.detailData?.length,
+                            itemBuilder: (context, index) {
+                              return ElectricCategoryTile.buildTile(
+                                  context, controller.detailData[index]);
+                            },
+                          ),
                         ),
                       ),
                     ],

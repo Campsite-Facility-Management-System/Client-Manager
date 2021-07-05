@@ -22,6 +22,7 @@ class ElectricGraphGetX extends GetxController {
   Map<String, dynamic> usageData;
   var campId;
   var deviceId;
+  var loopStatus = false;
 
   loop() {
     const duration = const Duration(seconds: 5);
@@ -191,5 +192,11 @@ class ElectricGraphGetX extends GetxController {
           i.toDouble(), graphData["electricity"][12 - i]["watt"].toDouble()));
     }
     return spotList;
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
   }
 }

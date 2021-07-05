@@ -17,36 +17,10 @@ class MainFunction extends StatefulWidget {
 class _MainFunctionState extends State<MainFunction> {
   int currentPage = 0;
   // final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
-  static DateTime pressBack;
   final token = new FlutterSecureStorage();
   List<String> campNameList = [];
   List<String> campIdList = [];
   var selected;
-
-  // _end(context) {
-  //   DateTime now = DateTime.now();
-  //   if (pressBack == null || now.difference(pressBack) > Duration(seconds: 2)) {
-  //     pressBack = now;
-  //     _globalKey.currentState;
-  //     // ..hideCurrentSnackBar()
-  //     _globalKey.currentState.showSnackBar(SnackBar(
-  //       behavior: SnackBarBehavior.floating,
-  //       content: Text('한번 더 누르면 앱을 종료합니다'),
-  //       duration: Duration(seconds: 2),
-  //     ));
-
-  //     return false;
-  //   } else {
-  //     SystemNavigator.pop();
-  //     return true;
-  //   }
-  // }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

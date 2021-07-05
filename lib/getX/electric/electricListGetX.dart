@@ -11,7 +11,7 @@ class ElectricInfoGetX extends GetxController {
   List<String> campIdList = [];
   var selectedCampId;
   var selectedCampName;
-  var detailData;
+  var detailData = List<dynamic>().obs;
 
   setSelectedCampId(campId) async {
     selectedCampId = campId;
@@ -57,7 +57,7 @@ class ElectricInfoGetX extends GetxController {
       'campsite_id': selectedCampId,
     });
 
-    detailData = jsonDecode(utf8.decode(response.bodyBytes));
+    detailData.value = jsonDecode(utf8.decode(response.bodyBytes));
 
     // print('data: ' + detailData.toString());
     update();
