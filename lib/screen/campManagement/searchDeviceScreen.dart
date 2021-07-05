@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -9,8 +8,10 @@ import 'package:client_manager/screen/campManagement/setDeviceWifiScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:bluetooth_enable/bluetooth_enable.dart';
+import 'package:android_intent/android_intent.dart';
+import 'package:location/location.dart';
 
 class SearchDeviceScreen extends StatefulWidget {
   final bool start;
@@ -25,27 +26,42 @@ class SearchDeviceScreenState extends State<SearchDeviceScreen> {
   List<BluetoothDiscoveryResult> results = List<BluetoothDiscoveryResult>();
   bool isDiscovering;
   BluetoothConnection connection;
-
   SearchDeviceScreenState();
 
   @override
   void initState() {
     super.initState();
-    _checkPermissions();
+
+    // Location.instance.serviceEnabled();
+
+    //위치 설정 진입
+    _locationOn();
+    //블루투스 ON
+    BluetoothEnable.enableBluetooth;
+
+    // _checkPermissions();
     isDiscovering = widget.start;
     if (isDiscovering) {
       _startDiscovery();
     }
   }
 
-  _checkPermissions() async {
-    if (Platform.isAndroid) {
-      if (await Permission.contacts.request().isGranted) {}
-      Map<Permission, PermissionStatus> statuses =
-          await [Permission.location].request();
-      print(statuses[Permission.location]);
-    }
+  //위치 설정 진입
+  _locationOn() async {
+    final AndroidIntent intent = new AndroidIntent(
+      action: 'android.settings.LOCATION_SOURCE_SETTINGS',
+    );
+    await intent.launch();
   }
+
+  // _checkPermissions() async {
+  //   if (Platform.isAndroid) {
+  //     if (await Permission.contacts.request().isGranted) {}
+  //     Map<Permission, PermissionStatus> statuses =
+  //         await [Permission.location].request();
+  //     print(statuses[Permission.location]);
+  //   }
+  // }
 
   void _restartDiscovery() {
     setState(() {

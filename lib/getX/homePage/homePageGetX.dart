@@ -45,8 +45,7 @@ class homePageGetX extends GetxController {
       'Authorization': myToken,
     });
 
-    var d = utf8.decode(response.bodyBytes);
-    campList.value = jsonDecode(d) as List;
+    campList.value = jsonDecode(utf8.decode(response.bodyBytes)) as List;
   }
 
   @override
