@@ -1,4 +1,3 @@
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:client_manager/getX/token/tokenGetX.dart';
 import 'package:client_manager/screen/electric/electricListScreen.dart';
 import 'package:client_manager/screen/homePage/homePageScreen.dart';
@@ -7,8 +6,6 @@ import 'package:client_manager/screen/notificationPage/notiPageScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-
-import 'package:provider/provider.dart';
 
 class MainFunction extends StatefulWidget {
   final int pageNum;
@@ -21,7 +18,6 @@ class _MainFunctionState extends State<MainFunction> {
   int currentPage = 0;
   // final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   static DateTime pressBack;
-  final tokenFuntion = TokenFunction();
   final token = new FlutterSecureStorage();
   List<String> campNameList = [];
   List<String> campIdList = [];

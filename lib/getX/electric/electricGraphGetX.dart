@@ -1,9 +1,6 @@
 import 'dart:async';
-
 import 'package:client_manager/function/env.dart';
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -11,7 +8,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ElectricGraphGetX extends GetxController {
   final token = new FlutterSecureStorage();
-  final tokenFunction = new TokenFunction();
   Map graphData;
   List<FlSpot> spotList = List();
   List<int> leftTitle = List();

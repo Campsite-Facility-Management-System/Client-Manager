@@ -9,20 +9,7 @@ import 'container/electric/electricInfo/model/usageData.dart';
 
 void main() {
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => IdCollector(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => UsageData(0, 0),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => GraphData(0, [FlSpot(0.0, 0.0)]),
-        ),
-      ],
-      child: MyApp(),
-    ),
+    MyApp(),
   );
 }
 

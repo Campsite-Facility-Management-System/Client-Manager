@@ -1,6 +1,5 @@
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/function/addPicture.dart';
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -18,14 +17,6 @@ class AddCampScreenState extends State<AddCampScreen> {
   TextEditingController _phone = new TextEditingController();
   TextEditingController _info = new TextEditingController();
   final token = new FlutterSecureStorage();
-  final tokenFunction = TokenFunction();
-
-  _check() async {
-    bool result = await tokenFunction.tokenCheck(context);
-    if (!result) {
-      Navigator.pushNamed(context, '/login');
-    }
-  }
 
   getimage(imagePath, index) {
     imageList[index] = imagePath;
@@ -68,13 +59,6 @@ class AddCampScreenState extends State<AddCampScreen> {
     } else if (response.statusCode == 401) {
       // print("error");
     }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _check();
   }
 
   @override

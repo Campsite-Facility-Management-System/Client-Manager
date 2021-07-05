@@ -1,27 +1,13 @@
 import 'package:client_manager/container/homePage/campList.dart';
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:client_manager/screen/campManagement/addCampScreen.dart';
-import 'package:client_manager/screen/signPage/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
-class HomePageScreen extends StatefulWidget {
-  @override
-  HomePageScreenState createState() => HomePageScreenState();
-}
-
-class HomePageScreenState extends State<HomePageScreen> {
+class HomePageScreen extends StatelessWidget {
   final token = new FlutterSecureStorage();
-  final tokenFunction = TokenFunction();
 
-  _check() async {
-    bool result = await tokenFunction.tokenCheck(context);
-    if (!result) {
-      Get.to(LoginScreen());
-    }
-  }
   // final GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   // static DateTime pressBack;
 
@@ -45,17 +31,9 @@ class HomePageScreenState extends State<HomePageScreen> {
   // }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _check();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final homePageController = Get.put(homePageGetX());
     homePageController.apiCampList();
-    homePageController.me();
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -66,7 +44,7 @@ class HomePageScreenState extends State<HomePageScreen> {
                 height: 70,
               ),
               Row(
-                children: [
+                children: <Widget>[
                   SizedBox(
                     width: 30,
                   ),

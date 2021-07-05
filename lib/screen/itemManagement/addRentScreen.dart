@@ -1,6 +1,5 @@
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/function/addPicture.dart';
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +16,6 @@ class AddRentScreenState extends State<AddRentScreen> {
   TextEditingController _price = new TextEditingController();
   TextEditingController _info = new TextEditingController();
   final token = new FlutterSecureStorage();
-  final tokenFunction = TokenFunction();
 
   upload() async {
     var url = Env.url + '/api/campsite/manager/add';

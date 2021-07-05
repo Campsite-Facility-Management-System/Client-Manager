@@ -1,5 +1,4 @@
 import 'package:client_manager/container/electric/electricList/model/electricCategoryTile.dart';
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:client_manager/getX/electric/electricGraphGetX.dart';
 import 'package:client_manager/getX/electric/electricListGetX.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,6 @@ class ElectricListScreenState extends State<ElectricListScreen> {
   var campId;
   bool refreshListener = false;
   final token = new FlutterSecureStorage();
-  final tokenFunction = new TokenFunction();
   List<String> campNameList = [];
   List<String> campIdList = [];
 

@@ -6,15 +6,16 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+var campList = List<dynamic>().obs;
+
 class homePageGetX extends GetxController {
   final token = FlutterSecureStorage();
-  List<dynamic> campList = [];
+  // List<dynamic> campList = [];
+  // final profile = new MyInfo().obs;
 
   @override
   onInit() {
     super.onInit();
-    apiCampList();
-    me();
   }
 
   Future<MyInfo> me() async {
@@ -35,7 +36,7 @@ class homePageGetX extends GetxController {
     );
   }
 
-  Future<List<CampData>> apiCampList() async {
+  apiCampList() async {
     var url = Env.url + '/api/campsite/manager/list';
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value.toString());
@@ -45,9 +46,7 @@ class homePageGetX extends GetxController {
     });
 
     var d = utf8.decode(response.bodyBytes);
-    campList = jsonDecode(d) as List<CampData>;
-
-    return campList;
+    campList.value = jsonDecode(d) as List;
   }
 
   @override

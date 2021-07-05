@@ -1,6 +1,6 @@
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:client_manager/getX/campManagement/campDetailGetX.dart';
 import 'package:client_manager/getX/campManagement/setDeviceGetX.dart';
+import 'package:client_manager/screen/campManagement/searchDeviceScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -14,24 +14,9 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
   var uuid;
   TextEditingController _name = new TextEditingController();
   final token = new FlutterSecureStorage();
-  final tokenFunction = TokenFunction();
-
-  _check() async {
-    bool result = await tokenFunction.tokenCheck(context);
-    if (!result) {
-      Navigator.pushNamed(context, '/login');
-    }
-  }
 
   var selected;
   var selectedId;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _check();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +50,7 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
                             RaisedButton(
                                 child: Text('블루투스 검색'),
                                 onPressed: () => {
-                                      // Get.to(() => SearchDeviceScreen()),
-                                      Navigator.pushNamed(context, '/search'),
+                                      Get.to(() => SearchDeviceScreen()),
                                     }),
                           ],
                         ),

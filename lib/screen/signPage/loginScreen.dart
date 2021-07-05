@@ -1,4 +1,3 @@
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:client_manager/getX/token/tokenGetX.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,7 +12,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _email = new TextEditingController();
   TextEditingController _passwd = new TextEditingController();
   final token = new FlutterSecureStorage();
-  final tokenFunction = new TokenFunction();
 
   @override
   void initState() {

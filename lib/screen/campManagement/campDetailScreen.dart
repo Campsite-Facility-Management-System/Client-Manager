@@ -1,7 +1,6 @@
 import 'package:client_manager/container/campManagement/categoryList.dart';
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:client_manager/getX/campManagement/campDetailGetX.dart';
-import 'package:client_manager/provider/idCollector.dart';
+import 'package:client_manager/screen/campManagement/addDeviceScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -14,21 +13,6 @@ class CampDetailScreen extends StatefulWidget {
 
 class CampDetailScreenState extends State<CampDetailScreen> {
   final token = new FlutterSecureStorage();
-  final tokenFunction = TokenFunction();
-
-  _check() async {
-    bool result = await tokenFunction.tokenCheck(context);
-    if (!result) {
-      Navigator.pushNamed(context, '/login');
-    }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _check();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +46,11 @@ class CampDetailScreenState extends State<CampDetailScreen> {
                     '/addCategory',
                   )),
           SpeedDialChild(
-              child: Icon(Icons.accessibility),
-              backgroundColor: Colors.green,
-              label: '디바이스',
-              onTap: () => Navigator.pushNamed(context, '/addDevice'))
+            child: Icon(Icons.accessibility),
+            backgroundColor: Colors.green,
+            label: '디바이스',
+            onTap: () => Get.to(AddDeviceScreen()),
+          ),
         ],
       ),
     );

@@ -1,4 +1,3 @@
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:client_manager/getX/electric/electricGraphGetX.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +9,6 @@ class ElectricInfoScreen extends StatefulWidget {
 }
 
 class ElectricInfoScreenState extends State<ElectricInfoScreen> {
-  final tokenFuntion = TokenFunction();
-
   @override
   void initState() {
     super.initState();

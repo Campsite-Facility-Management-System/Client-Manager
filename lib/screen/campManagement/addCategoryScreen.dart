@@ -1,6 +1,5 @@
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/function/addPicture.dart';
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:client_manager/provider/idCollector.dart';
 import 'package:client_manager/screen/campManagement/campDetailScreen.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +23,6 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
   TextEditingController _max_children_num = new TextEditingController();
   TextEditingController _max_energy = new TextEditingController();
   final token = new FlutterSecureStorage();
-  final tokenFunction = TokenFunction();
-
-  _check() async {
-    bool result = await tokenFunction.tokenCheck(context);
-    if (!result) {
-      Navigator.pushNamed(context, '/login');
-    }
-  }
 
   getimage(imagePath, index) {
     imageList[index] = imagePath;
@@ -83,13 +74,6 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
     } else if (response.statusCode == 401) {
       // print("error");
     }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _check();
   }
 
   @override

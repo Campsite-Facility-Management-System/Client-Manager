@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:client_manager/function/env.dart';
-import 'package:client_manager/function/token/tokenFunction.dart';
 import 'package:client_manager/getX/electric/electricGraphGetX.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -19,7 +18,6 @@ class ElectricInfo extends StatefulWidget {
 
 class ElectricInfoState extends State<ElectricInfo> {
   final token = new FlutterSecureStorage();
-  final tokenFunction = new TokenFunction();
 
   bool isSwitched = false;
   Map<String, dynamic> list;
@@ -27,8 +25,6 @@ class ElectricInfoState extends State<ElectricInfo> {
   var uuid;
 
   Future<Null> getUsageData() async {
-    tokenFunction.tokenCheck(context);
-
     var url = Env.url + '/api/device/manager/energy/usage';
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
@@ -48,8 +44,6 @@ class ElectricInfoState extends State<ElectricInfo> {
   }
 
   Future<Null> getDevice() async {
-    tokenFunction.tokenCheck(context);
-
     var url = Env.url + '/api/device/manager/list';
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
@@ -74,8 +68,6 @@ class ElectricInfoState extends State<ElectricInfo> {
   }
 
   Future<Null> _changeStatus() async {
-    tokenFunction.tokenCheck(context);
-
     var url = Env.url + '/api/device/manager/controll';
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
