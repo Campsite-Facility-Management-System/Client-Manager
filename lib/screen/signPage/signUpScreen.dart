@@ -68,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   //닉네임 중복검사 필요
   String _validateNickName(String input) {
-    RegExp regex = new RegExp(r'^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9|a-z|A-Z]{2,6}$');
+    RegExp regex = new RegExp(r'^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9|a-z|A-Z]{2,8}$');
     return !regex.hasMatch(input) ? '     2~8자의 한글, 영문, 숫자만 사용할 수 있습니다.' : null;
   }
 
