@@ -1,4 +1,3 @@
-import 'package:client_manager/function/gateway.dart';
 import 'package:client_manager/container/homePage/profile.dart';
 import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:flutter/material.dart';

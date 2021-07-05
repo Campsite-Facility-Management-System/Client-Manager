@@ -45,7 +45,7 @@ class homePageGetX extends GetxController {
     });
 
     var d = utf8.decode(response.bodyBytes);
-    campList = jsonDecode(d) as List;
+    campList = jsonDecode(d) as List<CampData>;
 
     return campList;
   }
