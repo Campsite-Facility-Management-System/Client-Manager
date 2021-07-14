@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "826172326291",
-    "project_id": "campsitefmsmanager",
-    "storage_bucket": "campsitefmsmanager.appspot.com"
+    "project_number": "1006455054210",
+    "project_id": "campsitefms-1a609",
+    "storage_bucket": "campsitefms-1a609.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:826172326291:android:195e0f43690bf580dc2866",
+        "mobilesdk_app_id": "1:1006455054210:android:6ecd483235fc84925a399b",
         "android_client_info": {
           "package_name": "com.example.client_manager"
         }
       },
       "oauth_client": [
         {
-          "client_id": "826172326291-do51o9su6e1lj34gebhtv2qt5pc8flrc.apps.googleusercontent.com",
+          "client_id": "1006455054210-2nqu1n9ptrhc8lhjcvcldvb94bdk3dnv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDWrnGjxi91BVwLfq01rx5VONTjCNCf9mA"
+          "current_key": "AIzaSyB5J_FQ39XigZUPFjByUJLX1qWg8xeSj-Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "826172326291-do51o9su6e1lj34gebhtv2qt5pc8flrc.apps.googleusercontent.com",
+              "client_id": "1006455054210-2nqu1n9ptrhc8lhjcvcldvb94bdk3dnv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

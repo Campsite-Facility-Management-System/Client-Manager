@@ -1,3 +1,4 @@
+import 'package:client_manager/getX/fcm/notification_controller.dart';
 import 'package:client_manager/getX/token/tokenGetX.dart';
 import 'package:client_manager/screen/signPage/signUpScreen.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final noti = Get.put(Notification_Controller());
     final tokenController = Get.put(TokenGetX());
     return WillPopScope(
       onWillPop: () async {
@@ -87,8 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 200,
                     child: RaisedButton(
                       color: Colors.green,
-                      onPressed: () =>
-                          tokenController.login(_email.text, _passwd.text),
+                      onPressed: () => noti.notify(),
+                      // tokenController.login(_email.text, _passwd.text),
                       child: Text(
                         '로그인',
                         style: TextStyle(color: Colors.white),

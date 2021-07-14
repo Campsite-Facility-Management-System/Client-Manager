@@ -9,15 +9,17 @@ class NotiPageScreenState extends State<NotiPageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Text("알림"),
-              ],
-            ),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Text("알림"),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -14,18 +14,30 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Handling a background message ${message.messageId}');
   AwesomeNotifications().createNotificationFromJsonData(message.data);
 
-  AwesomeNotifications().createNotification(
-      content: NotificationContent(
-    id: 1,
-    channelKey: 'high_importance_channel',
-    title: message.notification?.title,
-    body: message.notification?.body,
-    bigPicture: message.notification.android.imageUrl,
-    notificationLayout: NotificationLayout.BigPicture,
-    displayOnBackground: true,
-    displayOnForeground: true,
-    largeIcon: message.notification.android.imageUrl,
-  ));
+  if (message.notification.android.imageUrl != null) {
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: 1,
+      channelKey: 'high_importance_channel',
+      title: message.notification?.title,
+      body: message.notification?.body,
+      bigPicture: message.notification.android.imageUrl,
+      notificationLayout: NotificationLayout.BigPicture,
+      displayOnBackground: true,
+      displayOnForeground: true,
+      largeIcon: message.notification.android.imageUrl,
+    ));
+  } else {
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: 1,
+      channelKey: 'high_importance_channel',
+      title: message.notification?.title,
+      body: message.notification?.body,
+      displayOnBackground: true,
+      displayOnForeground: true,
+    ));
+  }
 }
 
 void main() async {

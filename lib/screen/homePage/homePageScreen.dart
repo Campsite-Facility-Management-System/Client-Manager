@@ -36,13 +36,34 @@ class HomePageScreen extends StatelessWidget {
     homePageController.apiCampList();
 
     return Scaffold(
+      drawer: Drawer(
+        child: Column(
+          children: <Widget>[
+            DrawerHeader(
+              child: Center(
+                child: Text(
+                  'Side menu FlutterCorner',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white, fontSize: 25),
+                ),
+              ),
+              decoration: BoxDecoration(
+                color: Colors.black,
+              ),
+            ),
+            ListTile(
+              title: Text('전력 제어'),
+            )
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+      ),
       body: SingleChildScrollView(
         child: Container(
           child: Column(
             children: [
-              SizedBox(
-                height: 70,
-              ),
               Row(
                 children: <Widget>[
                   SizedBox(
