@@ -1,5 +1,6 @@
 import 'package:client_manager/getX/fcm/notification_controller.dart';
 import 'package:client_manager/getX/token/tokenGetX.dart';
+import 'package:client_manager/main.dart';
 import 'package:client_manager/screen/signPage/signUpScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -89,8 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 200,
                     child: RaisedButton(
                       color: Colors.green,
-                      onPressed: () => noti.notify(),
-                      // tokenController.login(_email.text, _passwd.text),
+                      onPressed: () =>
+                          tokenController.login(_email.text, _passwd.text),
                       child: Text(
                         '로그인',
                         style: TextStyle(color: Colors.white),

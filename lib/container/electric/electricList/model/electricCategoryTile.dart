@@ -5,12 +5,8 @@ import '../electricDeviceList.dart';
 class ElectricCategoryTile {
   static Widget buildTile(context, item) => Container(
         child: Container(
-          margin: EdgeInsets.only(top: 10, left: 10, right: 10),
           decoration: BoxDecoration(
             border: Border.all(width: 0.2),
-            borderRadius: BorderRadius.all(
-              Radius.circular(20),
-            ),
           ),
           child: Column(
             children: <Widget>[

@@ -21,19 +21,21 @@ class ProfileScreenState extends State<ProfileScreen> {
     final controller = Get.put(homePageGetX());
 
     return Container(
-      margin: EdgeInsets.only(bottom: 50),
       child: FutureBuilder<MyInfo>(
         future: controller.me(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 90,
+                        width: 70,
                         child: ListTile(
                           title: new CachedNetworkImage(
                             imageBuilder: (BuildContext context,
@@ -55,19 +57,16 @@ class ProfileScreenState extends State<ProfileScreen> {
                             },
                             imageUrl: Env.url + snapshot.data.img_url,
                             placeholder: (context, url) => Container(
-                              height: 100,
-                              width: 100,
+                              height: 50,
+                              width: 50,
                             ),
                             errorWidget: (context, url, error) =>
                                 new Icon(Icons.error),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      SizedBox(
-                        width: 150,
+                      Container(
+                        margin: EdgeInsets.only(right: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -75,7 +74,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                               snapshot.data.nick != null
                                   ? snapshot.data.nick
                                   : 'null',
-                              style: TextStyle(fontSize: 25),
+                              style: TextStyle(fontSize: 16),
                             ),
                             Text(
                               '포인트: ' +
@@ -83,18 +82,24 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       ? snapshot.data.point
                                       : 'null') +
                                   ' Point',
-                              style: TextStyle(fontSize: 17),
+                              style: TextStyle(fontSize: 16),
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(width: 30),
-                      RaisedButton(
-                        color: Colors.green,
-                        onPressed: () => tokenController.logout(),
-                        child: Text(
-                          '로그아웃',
-                          style: TextStyle(color: Colors.white),
+                      Container(
+                        height: 30,
+                        width: 80,
+                        child: RaisedButton(
+                          color: Colors.green,
+                          onPressed: () => tokenController.logout(),
+                          child: Text(
+                            '로그아웃',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),
+                          ),
                         ),
                       ),
                     ],

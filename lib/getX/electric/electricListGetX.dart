@@ -7,21 +7,21 @@ import 'package:http/http.dart' as http;
 
 class ElectricInfoGetX extends GetxController {
   final token = new FlutterSecureStorage();
+  // var campNameList = List<String>().obs;
+  // var campIdList = List<String>().obs;
   List<String> campNameList = [];
   List<String> campIdList = [];
-  var selectedCampId;
-  var selectedCampName;
+  var selectedCampId = ''.obs;
+  var selectedCampName = ''.obs;
   var detailData = List<dynamic>().obs;
 
   setSelectedCampId(campId) async {
-    selectedCampId = campId;
-    print("campId: " + selectedCampId);
+    selectedCampId.value = campId;
     await apiElectricCategoryList();
   }
 
   setSelectedCampName(campName) {
-    selectedCampName = campName;
-    print("campName: " + selectedCampName);
+    selectedCampName.value = campName;
   }
 
   apiCampInfo() async {
@@ -34,8 +34,6 @@ class ElectricInfoGetX extends GetxController {
     });
 
     var data = jsonDecode(utf8.decode(response.bodyBytes));
-
-    // print(data.toString());
 
     for (var i = 0; i < data.length; i++) {
       campNameList.add(data[i]['name'].toString());
@@ -54,13 +52,12 @@ class ElectricInfoGetX extends GetxController {
     var response = await http.post(Uri.parse(url), headers: {
       'Authorization': myToken,
     }, body: {
-      'campsite_id': selectedCampId,
+      'campsite_id': selectedCampId.toString(),
     });
 
     detailData.value = jsonDecode(utf8.decode(response.bodyBytes));
 
-    // print('data: ' + detailData.toString());
-    update();
+    print('data: ' + detailData.toString());
   }
 
   @override

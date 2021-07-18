@@ -21,15 +21,9 @@ class CampList extends StatelessWidget {
         margin: EdgeInsets.only(left: 10, right: 10),
         height: 620,
         child: ListView.builder(
-          itemCount: campList.length + 1,
+          itemCount: campList.length,
           itemBuilder: (context, index) {
-            if (index == 0) {
-              return ProfileScreen();
-            } else {
-              return CampTile.buildTile(context, campList[index - 1]);
-            }
-            // print("index: " + index.toString());
-            // print("list index: " + list[index].toString());
+            return CampTile.buildTile(context, campList[index]);
           },
         ),
       ),

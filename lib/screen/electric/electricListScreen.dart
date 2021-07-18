@@ -5,12 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
-class ElectricListScreen extends StatefulWidget {
-  @override
-  ElectricListScreenState createState() => ElectricListScreenState();
-}
-
-class ElectricListScreenState extends State<ElectricListScreen> {
+class ElectricListScreen extends StatelessWidget {
   var selectedcampName;
   var selectedIndex;
   var selectedId;
@@ -21,70 +16,64 @@ class ElectricListScreenState extends State<ElectricListScreen> {
   List<String> campIdList = [];
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ElectricInfoGetX());
+    final infoController = Get.put(ElectricInfoGetX());
     return Scaffold(
-      body: SingleChildScrollView(
+      body: Container(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              height: 50,
-            ),
-            DropdownButton(
-              value: controller.selectedCampName,
-              items: controller.campNameList.map(
-                (value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: Text(value),
-                  );
-                },
-              ).toList(),
-              onChanged: (value) {
-                setState(() {
-                  controller.setSelectedCampName(value);
-                  selectedIndex = controller.campNameList.indexOf(value);
-                  controller
-                      .setSelectedCampId(controller.campIdList[selectedIndex]);
-                });
-              },
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            GetBuilder<ElectricInfoGetX>(
-              builder: (_) {
-                return Container(
-                  child: Column(
-                    children: <Widget>[
-                      RaisedButton(
-                        child: Text('새로고침'),
-                        onPressed: () => {controller.apiElectricCategoryList()},
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: Obx(
+                      () => DropdownButton(
+                        value: infoController.selectedCampName.value,
+                        items: infoController.campNameList.map(
+                          (value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(fontSize: 24),
+                              ),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (value) {
+                          infoController.setSelectedCampName(value);
+                          selectedIndex =
+                              infoController.campNameList.indexOf(value);
+                          infoController.setSelectedCampId(
+                              infoController.campIdList[selectedIndex]);
+                        },
                       ),
-                      Container(
-                        height: 650,
-                        margin: EdgeInsets.only(left: 10, right: 10),
-                        child: Obx(
-                          () => ListView.builder(
-                            itemCount: controller.detailData == null
-                                ? 0
-                                : controller.detailData?.length,
-                            itemBuilder: (context, index) {
-                              return ElectricCategoryTile.buildTile(
-                                  context, controller.detailData[index]);
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                );
-              },
+                ),
+                RaisedButton(
+                  child: Text('새로고침'),
+                  onPressed: () => {infoController.apiElectricCategoryList()},
+                ),
+              ],
+            ),
+            Expanded(
+              child: Container(
+                height: 650,
+                child: Obx(
+                  () => ListView.builder(
+                    itemCount: infoController.detailData.value == null
+                        ? 0
+                        : infoController.detailData.value?.length,
+                    itemBuilder: (context, index) {
+                      return ElectricCategoryTile.buildTile(
+                          context, infoController.detailData.value[index]);
+                    },
+                  ),
+                ),
+              ),
             ),
           ],
         ),
