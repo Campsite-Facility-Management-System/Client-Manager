@@ -97,7 +97,7 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
                 Container(
                   width: 350,
                   height: 200,
-                  child: AddPicture(350, 250, 0, 2),
+                  child: AddPicture(350, 250, 'a', 0, 2),
                 ),
                 SizedBox(
                   height: 20,
@@ -112,7 +112,7 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
                     Container(
                       width: 50,
                       height: 50,
-                      child: AddPicture(50, 50, 1, 2),
+                      child: AddPicture(350, 250, 'a', 0, 2),
                     ),
                     SizedBox(
                       width: 20,
@@ -120,7 +120,7 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
                     Container(
                       width: 50,
                       height: 50,
-                      child: AddPicture(50, 50, 2, 2),
+                      child: AddPicture(350, 250, 'a', 0, 2),
                     ),
                     SizedBox(
                       width: 20,
@@ -128,7 +128,7 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
                     Container(
                       width: 50,
                       height: 50,
-                      child: AddPicture(50, 50, 3, 2),
+                      child: AddPicture(350, 250, 'a', 0, 2),
                     ),
                     SizedBox(
                       width: 20,
@@ -136,7 +136,7 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
                     Container(
                       width: 50,
                       height: 50,
-                      child: AddPicture(50, 5, 4, 2),
+                      child: AddPicture(350, 250, 'a', 0, 2),
                     ),
                     SizedBox(
                       width: 20,
@@ -144,7 +144,7 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
                     Container(
                       width: 50,
                       height: 50,
-                      child: AddPicture(50, 50, 5, 2),
+                      child: AddPicture(350, 250, 'a', 0, 2),
                     ),
                   ],
                 ),

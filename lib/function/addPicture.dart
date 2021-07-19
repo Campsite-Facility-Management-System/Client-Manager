@@ -5,10 +5,12 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class AddPicture extends StatefulWidget {
-  final double width, height;
+  final int height;
+  final int width;
+  final String text;
   final int index;
   final int type;
-  const AddPicture(this.width, this.height, this.index, this.type);
+  const AddPicture(this.height, this.width, this.text, this.index, this.type);
 
   @override
   AddPictureState createState() => AddPictureState();
@@ -79,19 +81,58 @@ class AddPictureState extends State<AddPicture> {
       child: _image != null
           ? ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.file(
-                _image,
-                fit: BoxFit.fitHeight,
+              child: Container(
+                height: widget.height.toDouble(),
+                width: widget.width.toDouble(),
+                child: Image.file(
+                  _image,
+                  fit: BoxFit.cover,
+                ),
               ),
             )
           : Container(
               decoration: BoxDecoration(
-                  color: Colors.grey, borderRadius: BorderRadius.circular(10)),
-              width: widget.width,
-              height: widget.height,
-              child: Icon(
-                Icons.add,
-                color: Colors.blue,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 10,
+                    offset: Offset(0, 7),
+                  )
+                ],
+                // border: Border.all(
+                //   width: 1,
+                //   color: Colors.grey,
+                // ),
+              ),
+              width: widget.width.toDouble(),
+              height: widget.height.toDouble(),
+              child: Column(
+                children: [
+                  Expanded(child: SizedBox()),
+                  Expanded(
+                    child: Container(
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.green,
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: Text(
+                        widget.text,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
     );
