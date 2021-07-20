@@ -168,7 +168,11 @@ class _MainFunctionState extends State<MainFunction> {
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.grey),
           actions: <Widget>[
-            IconButton(onPressed: null, icon: Icon(Icons.notifications))
+            IconButton(
+                onPressed: () {
+                  Get.to(NotiPageScreen());
+                },
+                icon: Icon(Icons.notifications))
           ],
         ),
         body: IndexedStack(

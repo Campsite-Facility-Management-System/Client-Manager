@@ -1,5 +1,6 @@
 import 'package:client_manager/container/homePage/model/myInfo.dart';
 import 'package:client_manager/function/env.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -9,12 +10,17 @@ var campList = List<dynamic>().obs;
 
 class homePageGetX extends GetxController {
   final token = FlutterSecureStorage();
-  // List<dynamic> campList = [];
-  // final profile = new MyInfo().obs;
+  PageController pageController;
+  double viewPortFraction = 0.5;
+  var currentPage = 0.obs;
+  var page = 0.obs;
 
   @override
   onInit() {
     super.onInit();
+    apiCampList();
+    pageController = PageController(
+        initialPage: currentPage.toInt(), viewportFraction: viewPortFraction);
   }
 
   Future<MyInfo> me() async {
