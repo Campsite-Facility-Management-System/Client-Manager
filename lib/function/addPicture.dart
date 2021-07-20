@@ -116,7 +116,7 @@ class AddPictureState extends State<AddPicture> {
                     child: Container(
                       child: Icon(
                         Icons.add,
-                        color: Colors.green,
+                        color: const Color(0xff0abf52),
                         size: 40,
                       ),
                     ),

@@ -139,8 +139,8 @@ class AddCampScreenState extends State<AddCampScreen> {
                                   borderRadius: BorderRadius.circular(15),
                                   borderSide: BorderSide(color: Colors.white)),
                               focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: Colors.green),
+                                borderSide: BorderSide(
+                                    width: 2, color: const Color(0xff0abf52)),
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
@@ -163,8 +163,8 @@ class AddCampScreenState extends State<AddCampScreen> {
                                   borderRadius: BorderRadius.circular(15),
                                   borderSide: BorderSide(color: Colors.white)),
                               focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: Colors.green),
+                                borderSide: BorderSide(
+                                    width: 2, color: const Color(0xff0abf52)),
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
@@ -187,8 +187,8 @@ class AddCampScreenState extends State<AddCampScreen> {
                                   borderRadius: BorderRadius.circular(15),
                                   borderSide: BorderSide(color: Colors.white)),
                               focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: Colors.green),
+                                borderSide: BorderSide(
+                                    width: 2, color: const Color(0xff0abf52)),
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
@@ -213,8 +213,8 @@ class AddCampScreenState extends State<AddCampScreen> {
                                   borderRadius: BorderRadius.circular(15),
                                   borderSide: BorderSide(color: Colors.white)),
                               focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: Colors.green),
+                                borderSide: BorderSide(
+                                    width: 2, color: const Color(0xff0abf52)),
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
@@ -236,8 +236,8 @@ class AddCampScreenState extends State<AddCampScreen> {
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(15),
                             ),
-                            splashColor: Colors.green,
-                            color: Colors.green,
+                            splashColor: const Color(0xff0abf52),
+                            color: const Color(0xff0abf52),
                             onPressed: () => upload(),
                             child: Text(
                               '등록하기',

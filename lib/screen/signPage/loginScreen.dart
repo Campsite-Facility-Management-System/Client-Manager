@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'MODAK MODAK ADMIN',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.black,
+                        color: const Color(0xff402015),
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
@@ -69,6 +69,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.grey,
                           ),
                         ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: const Color(0xff0abf52),
+                          ),
+                        ),
                       ),
                       controller: _email,
                     ),
@@ -83,6 +89,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Colors.grey,
                             ),
                           ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: const Color(0xff0abf52),
+                            ),
+                          ),
                           hintText: 'PW'),
                       obscureText: true,
                       controller: _passwd,
@@ -90,14 +102,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Container(
                     margin: EdgeInsets.only(bottom: 20),
-                    width: 330,
+                    width: 220,
                     height: 40,
                     child: RaisedButton(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                       elevation: 3,
-                      color: Colors.green,
+                      color: const Color(0xff0abf52),
                       onPressed: () =>
                           tokenController.login(_email.text, _passwd.text),
                       child: Text(
@@ -106,20 +118,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  Container(
-                    width: 330,
-                    height: 40,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          side: BorderSide(color: Colors.green)),
-                      elevation: 3,
-                      color: Colors.white,
-                      onPressed: () => Get.to(SignUpScreen()),
-                      child: Text(
-                        '회원가입',
-                        style: TextStyle(color: Colors.green, fontSize: 18),
-                      ),
+                  TextButton(
+                    onPressed: () => Get.to(SignUpScreen()),
+                    child: Text(
+                      '회원가입',
+                      style: TextStyle(
+                          color: const Color(0xff0abf52), fontSize: 18),
                     ),
                   ),
                 ],
