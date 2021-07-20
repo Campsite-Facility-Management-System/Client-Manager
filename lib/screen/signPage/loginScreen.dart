@@ -34,84 +34,94 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           padding: EdgeInsets.all(15),
-          child: Container(
+          child: Center(
             child: Form(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: 100),
-                  SizedBox(
-                      height: 300,
-                      width: 300,
-                      child: Image.asset('icon/color-brown copy.jpg')),
-                  SizedBox(height: 10),
-                  Text(
-                    '모닥모닥',
-                    style: TextStyle(
-                      color: Colors.brown,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    margin: EdgeInsets.only(top: 100, bottom: 30),
+                    height: 300,
+                    width: 300,
+                    child: Image.asset('icon/color-brown copy.jpg'),
+                  ),
+                  Container(
+                    width: 220,
+                    child: Text(
+                      'MODAK MODAK ADMIN',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  SizedBox(height: 30),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Email',
-                          style: TextStyle(
-                            color: Colors.brown,
+                  Container(
+                    width: 220,
+                    margin: EdgeInsets.only(top: 20, bottom: 10),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'ID',
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey,
                           ),
                         ),
-                      ]),
-                  TextFormField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(), hintText: 'ID'),
-                    controller: _email,
+                      ),
+                      controller: _email,
+                    ),
                   ),
-                  SizedBox(height: 20),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text('Password',
-                            style: TextStyle(
-                              color: Colors.brown,
-                            )),
-                      ]),
-                  TextFormField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(), hintText: 'Password'),
-                    obscureText: true,
-                    controller: _passwd,
+                  Container(
+                    margin: EdgeInsets.only(bottom: 30),
+                    width: 220,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey,
+                            ),
+                          ),
+                          hintText: 'PW'),
+                      obscureText: true,
+                      controller: _passwd,
+                    ),
                   ),
-                  SizedBox(height: 20),
-                  SizedBox(
-                    width: 200,
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    width: 330,
+                    height: 40,
                     child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      elevation: 3,
                       color: Colors.green,
                       onPressed: () =>
                           tokenController.login(_email.text, _passwd.text),
                       child: Text(
                         '로그인',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
                   ),
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      RaisedButton(
-                        color: Colors.green,
-                        onPressed: () => Get.to(SignUpScreen()),
-                        child: Text(
-                          '회원가입',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                  Container(
+                    width: 330,
+                    height: 40,
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          side: BorderSide(color: Colors.green)),
+                      elevation: 3,
+                      color: Colors.white,
+                      onPressed: () => Get.to(SignUpScreen()),
+                      child: Text(
+                        '회원가입',
+                        style: TextStyle(color: Colors.green, fontSize: 18),
                       ),
-                    ],
-                  )
+                    ),
+                  ),
                 ],
               ),
             ),
