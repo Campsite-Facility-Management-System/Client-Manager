@@ -114,7 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   child: Material(
-                    elevation: 20,
+                    elevation: 7,
                     color: Colors.transparent,
                     child: Container(
                       child: TextFormField(
@@ -157,7 +157,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   child: Material(
-                    elevation: 20,
+                    elevation: 7,
                     color: Colors.transparent,
                     child: TextFormField(
                       decoration: InputDecoration(
@@ -199,7 +199,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   child: Material(
-                    elevation: 20,
+                    elevation: 7,
                     color: Colors.transparent,
                     child: TextFormField(
                       decoration: InputDecoration(
@@ -240,7 +240,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   child: Material(
-                    elevation: 20,
+                    elevation: 7,
                     color: Colors.transparent,
                     child: TextFormField(
                       decoration: InputDecoration(
@@ -281,7 +281,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   child: Material(
-                    elevation: 20,
+                    elevation: 7,
                     color: Colors.transparent,
                     child: TextFormField(
                       decoration: InputDecoration(
@@ -322,7 +322,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   child: Material(
-                    elevation: 20,
+                    elevation: 7,
                     color: Colors.transparent,
                     child: TextFormField(
                       decoration: InputDecoration(

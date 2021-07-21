@@ -1,8 +1,6 @@
-import 'dart:math';
-
 import 'package:client_manager/container/homePage/profile.dart';
 import 'package:client_manager/getX/token/tokenGetX.dart';
-import 'package:client_manager/screen/electric/electricListScreen.dart';
+import 'package:client_manager/screen/electric/electricManager.dart';
 import 'package:client_manager/screen/homePage/homePageScreen.dart';
 import 'package:client_manager/screen/morePage/morePageScreen.dart';
 import 'package:client_manager/screen/notificationPage/notiPageScreen.dart';
@@ -90,10 +88,8 @@ class _MainFunctionState extends State<MainFunction> {
                 ),
                 child: ListTile(
                   onTap: () {
-                    setState(() {
-                      currentPage = 1;
-                    });
                     Get.back();
+                    Get.to(ElectricManager());
                   },
                   leading: Icon(
                     Icons.control_camera,
@@ -179,7 +175,7 @@ class _MainFunctionState extends State<MainFunction> {
           index: currentPage,
           children: [
             HomePageScreen(),
-            ElectricListScreen(),
+            ElectricManager(),
             NotiPageScreen(),
             MorePageScreen(),
           ],
