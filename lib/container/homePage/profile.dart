@@ -17,7 +17,6 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final tokenController = Get.put(TokenGetX());
     final controller = Get.put(homePageGetX());
 
     return Container(
@@ -35,7 +34,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 70,
+                        width: 90,
                         child: ListTile(
                           title: new CachedNetworkImage(
                             imageBuilder: (BuildContext context,
@@ -85,21 +84,6 @@ class ProfileScreenState extends State<ProfileScreen> {
                               style: TextStyle(fontSize: 16),
                             ),
                           ],
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 80,
-                        child: RaisedButton(
-                          color: Colors.green,
-                          onPressed: () => tokenController.logout(),
-                          child: Text(
-                            '로그아웃',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                            ),
-                          ),
                         ),
                       ),
                     ],
