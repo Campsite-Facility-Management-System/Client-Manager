@@ -60,10 +60,44 @@ class ElectricInfoGetX extends GetxController {
     print('data: ' + detailData.toString());
   }
 
+  apichangeStatus(isSwitched, deviceId) async {
+    // tokenFunction.tokenCheck(context);
+
+    var url = Env.url + '/api/device/manager/controll';
+    String value = await token.read(key: 'token');
+    String myToken = ("Bearer " + value);
+    int status;
+
+    if (isSwitched == true) {
+      status = 1;
+    } else {
+      status = 0;
+    }
+    print('deviceId: ' + deviceId.toString());
+
+    print('to: ' + status.toString());
+
+    var response = await http.post(Uri.parse(url), headers: {
+      'Authorization': myToken,
+    }, body: {
+      'device_id': deviceId.toString(),
+      'command': status.toString(),
+    });
+
+    print(response.statusCode.toString());
+
+    await apiElectricCategoryList();
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     apiCampInfo();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
   }
 }

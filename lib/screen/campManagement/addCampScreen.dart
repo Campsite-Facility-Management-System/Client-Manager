@@ -1,5 +1,6 @@
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/function/addPicture.dart';
+import 'package:client_manager/function/mainFunction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -52,7 +53,7 @@ class AddCampScreenState extends State<AddCampScreen> {
     print(response.statusCode);
     print(await response.stream.bytesToString());
     if (response.statusCode == 200) {
-      Navigator.pushNamed(context, '/homePage');
+      Get.to(MainFunction());
     } else if (response.statusCode == 401) {}
   }
 

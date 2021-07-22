@@ -92,7 +92,7 @@ class MyApp extends StatelessWidget {
       }),
       title: '모닥모닥',
       debugShowCheckedModeBanner: false,
-      home: MainFunction(0),
+      home: MainFunction(),
     );
   }
 }

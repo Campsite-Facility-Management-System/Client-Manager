@@ -61,7 +61,7 @@ class SetDeviceGetX extends GetxController {
     print(response.stream.bytesToString());
 
     if (response.statusCode == 200) {
-      Get.offAll(MainFunction(0));
+      Get.offAll(MainFunction());
     } else if (response.statusCode == 401) {
       // print("error");
     }

@@ -9,8 +9,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 class MainFunction extends StatefulWidget {
-  final int pageNum;
-  const MainFunction(this.pageNum);
   @override
   _MainFunctionState createState() => _MainFunctionState();
 }
@@ -91,30 +89,6 @@ class _MainFunctionState extends State<MainFunction> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   '메인',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.grey),
-              ),
-            ),
-            child: ListTile(
-              onTap: () {
-                Get.back();
-                Get.to(ElectricManager());
-              },
-              leading: Icon(
-                Icons.control_camera,
-                color: Colors.green,
-              ),
-              title: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  '전력제어',
                   style: TextStyle(fontSize: 16),
                 ),
               ),

@@ -77,7 +77,7 @@ class TokenGetX extends GetxController {
   login(String email, String passwd) async {
     bool result = await tokenCreate(email, passwd);
     if (result) {
-      Get.to(MainFunction(0));
+      Get.to(MainFunction());
     }
   }
 
