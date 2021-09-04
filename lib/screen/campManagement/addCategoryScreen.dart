@@ -95,7 +95,7 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
                   margin: EdgeInsets.only(left: 20, bottom: 10),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    '캠핑장 추가',
+                    '카테고리 추가',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

@@ -192,10 +192,11 @@ class HomePageScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('예약자:'),
-                Text('예약기간:'),
-                Text('카테고리:'),
-                Text('디바이스:'),
+                Text('예약자: 모닥'),
+                Text('예약기간: 9/23~9/24'),
+                Text('카테고리: 글램핑'),
+                Text('디바이스: abbc12'),
+                Text('상태: 체크인'),
               ],
             ),
           );
@@ -222,9 +223,10 @@ class HomePageScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('구매자:'),
-                Text('구매물품:'),
-                Text('수량:'),
+                Text('구매자: 모닥'),
+                Text('구매물품: 장작'),
+                Text('수량: 2'),
+                Text('상태: 수령'),
               ],
             ),
           );

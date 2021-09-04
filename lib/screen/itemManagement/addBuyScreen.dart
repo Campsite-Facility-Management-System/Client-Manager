@@ -1,200 +1,238 @@
-// import 'package:client_manager/function/env.dart';
-// import 'package:client_manager/function/addPicture.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-// import 'package:http/http.dart' as http;
+import 'package:client_manager/function/env.dart';
+import 'package:client_manager/function/addPicture.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
-// List<dynamic> imageList = List(6);
+List<dynamic> imageList = List(6);
 
-// class AddBuyScreen extends StatefulWidget {
-//   @override
-//   AddBuyScreenState createState() => AddBuyScreenState();
-// }
+class AddBuyScreen extends StatefulWidget {
+  @override
+  AddBuyScreenState createState() => AddBuyScreenState();
+}
 
-// class AddBuyScreenState extends State<AddBuyScreen> {
-//   TextEditingController _name = new TextEditingController();
-//   TextEditingController _price = new TextEditingController();
-//   TextEditingController _info = new TextEditingController();
-//   final token = new FlutterSecureStorage();
+class AddBuyScreenState extends State<AddBuyScreen> {
+  TextEditingController _name = new TextEditingController();
+  TextEditingController _price = new TextEditingController();
+  TextEditingController _info = new TextEditingController();
+  final token = new FlutterSecureStorage();
 
-//   upload() async {
-//     var url = Env.url + '/api/campsite/manager/add';
-//     String value = await token.read(key: 'token');
-//     String myToken = ("Bearer " + value);
+  upload() async {
+    var url = Env.url + '/api/campsite/manager/add';
+    String value = await token.read(key: 'token');
+    String myToken = ("Bearer " + value);
 
-//     var request = http.MultipartRequest('POST', Uri.parse(url));
-//     request.headers.addAll({'Authorization': myToken});
-//     request.fields.addAll({
-//       'name': _name.text,
-//       'price': _price.text,
-//       'description': _info.text,
-//     });
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.headers.addAll({'Authorization': myToken});
+    request.fields.addAll({
+      'name': _name.text,
+      'price': _price.text,
+      'description': _info.text,
+    });
 
-//     for (int i = 0; i < 6; i++) {
-//       if (imageList[i] != null) {
-//         request.files
-//             .add(await http.MultipartFile.fromPath('img[]', imageList[i]));
-//       }
-//     }
-//     var response = await request.send();
-//     // print(request.headers);
-//     // print(request.fields);
-//     // print(request.files);
+    for (int i = 0; i < 6; i++) {
+      if (imageList[i] != null) {
+        request.files
+            .add(await http.MultipartFile.fromPath('img[]', imageList[i]));
+      }
+    }
+    var response = await request.send();
+    // print(request.headers);
+    // print(request.fields);
+    // print(request.files);
 
-//     print(response.statusCode);
-//     print(await response.stream.bytesToString());
-//     if (response.statusCode == 200) {
-//       // print("success");
-//       Navigator.pushNamed(context, '/homePage');
-//     } else if (response.statusCode == 401) {
-//       // print("error");
-//     }
-//   }
+    print(response.statusCode);
+    print(await response.stream.bytesToString());
+    if (response.statusCode == 200) {
+      // print("success");
+      Navigator.pushNamed(context, '/homePage');
+    } else if (response.statusCode == 401) {
+      // print("error");
+    }
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SingleChildScrollView(
-//         child: Container(
-//           padding: EdgeInsets.only(left: 20, right: 20),
-//           child: Column(
-//             children: <Widget>[
-//               SizedBox(
-//                 height: 100,
-//               ),
-//               Text(
-//                 '구매 물품 추가',
-//                 style: TextStyle(fontSize: 20),
-//               ),
-//               SizedBox(
-//                 height: 30,
-//               ),
-//               Text('대표사진(필수)'),
-//               SizedBox(
-//                 height: 10,
-//               ),
-//               Container(
-//                 width: 350,
-//                 height: 200,
-//                 child: AddPicture(350, 200, 0, 1),
-//               ),
-//               SizedBox(
-//                 height: 20,
-//               ),
-//               Text('추가 사진(최대 5개)'),
-//               SizedBox(
-//                 height: 10,
-//               ),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: <Widget>[
-//                   Container(
-//                     width: 50,
-//                     height: 50,
-//                     child: AddPicture(50, 50, 1, 1),
-//                   ),
-//                   SizedBox(
-//                     width: 20,
-//                   ),
-//                   Container(
-//                     width: 50,
-//                     height: 50,
-//                     child: AddPicture(50, 50, 2, 1),
-//                   ),
-//                   SizedBox(
-//                     width: 20,
-//                   ),
-//                   Container(
-//                     width: 50,
-//                     height: 50,
-//                     child: AddPicture(50, 50, 3, 1),
-//                   ),
-//                   SizedBox(
-//                     width: 20,
-//                   ),
-//                   Container(
-//                     width: 50,
-//                     height: 50,
-//                     child: AddPicture(50, 50, 4, 1),
-//                   ),
-//                   SizedBox(
-//                     width: 20,
-//                   ),
-//                   Container(
-//                     width: 50,
-//                     height: 50,
-//                     child: AddPicture(50, 50, 5, 1),
-//                   ),
-//                 ],
-//               ),
-//               Container(
-//                 padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-//                 child: Form(
-//                   child: Column(
-//                     children: [
-//                       Row(
-//                         children: [
-//                           Text('물품 이름'),
-//                         ],
-//                       ),
-//                       SizedBox(
-//                         height: 5,
-//                       ),
-//                       TextFormField(
-//                         decoration: InputDecoration(
-//                             border: OutlineInputBorder(), hintText: '캠핑장 이름'),
-//                         controller: _name,
-//                       ),
-//                       SizedBox(
-//                         height: 5,
-//                       ),
-//                       Row(
-//                         children: [
-//                           Text('물품 가격'),
-//                         ],
-//                       ),
-//                       SizedBox(
-//                         height: 5,
-//                       ),
-//                       TextFormField(
-//                         decoration: InputDecoration(
-//                             border: OutlineInputBorder(), hintText: '캠핑장 주소'),
-//                         controller: _price,
-//                       ),
-//                       SizedBox(
-//                         height: 5,
-//                       ),
-//                       Row(
-//                         children: [
-//                           Text('물품 정보'),
-//                         ],
-//                       ),
-//                       SizedBox(
-//                         height: 5,
-//                       ),
-//                       TextFormField(
-//                         decoration: InputDecoration(
-//                             border: OutlineInputBorder(), hintText: '캠핑장 전화번호'),
-//                         controller: _info,
-//                       ),
-//                       SizedBox(
-//                         height: 5,
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: 10,
-//               ),
-//               RaisedButton(
-//                 onPressed: () => upload(),
-//                 child: Text('등록하기'),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(Icons.arrow_back),
+          color: Colors.grey,
+        ),
+      ),
+      body: SafeArea(
+        child: Container(
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(left: 20, bottom: 10),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '물품 추가',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 200,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                          flex: 1,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 20, right: 10),
+                            child: AddPicture(200, 200, '대표 사진', 0, 2),
+                          )),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          margin: EdgeInsets.only(right: 20),
+                          child: GridView.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 20,
+                            children: [
+                              AddPicture(200, 160, '', 1, 2),
+                              AddPicture(200, 160, '', 2, 2),
+                              AddPicture(200, 160, '', 3, 2),
+                              AddPicture(200, 160, '', 4, 2),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                  child: Form(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Material(
+                          color: Colors.transparent,
+                          elevation: 8,
+                          shadowColor: Colors.black38,
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              labelText: '물품 이름',
+                              labelStyle: TextStyle(
+                                  color: Colors.black54, fontSize: 18),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(color: Colors.white)),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 2, color: const Color(0xff0abf52)),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            controller: _name,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Material(
+                          color: Colors.transparent,
+                          elevation: 8,
+                          shadowColor: Colors.black38,
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              labelText: '가격',
+                              labelStyle: TextStyle(
+                                  color: Colors.black54, fontSize: 18),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(color: Colors.white)),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 2, color: const Color(0xff0abf52)),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            controller: _price,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Material(
+                          color: Colors.transparent,
+                          elevation: 8,
+                          shadowColor: Colors.black38,
+                          child: TextFormField(
+                            maxLines: 5,
+                            maxLength: 200,
+                            decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              labelText: '물품 설명',
+                              labelStyle: TextStyle(
+                                  color: Colors.black54, fontSize: 18),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(color: Colors.white)),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 2, color: const Color(0xff0abf52)),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            controller: _info,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ButtonTheme(
+                          height: 50,
+                          child: RaisedButton(
+                            shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(15),
+                            ),
+                            splashColor: const Color(0xff0abf52),
+                            color: const Color(0xff0abf52),
+                            onPressed: () => upload(),
+                            child: Text(
+                              '등록하기',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
