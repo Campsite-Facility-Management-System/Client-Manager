@@ -21,6 +21,7 @@ class ElectricGraphGetX extends GetxController {
   var isSwitched = false;
   Map<String, dynamic> usageData;
   var campId;
+  var categoryId;
   var deviceId;
   var loopStatus = false;
 
@@ -89,6 +90,8 @@ class ElectricGraphGetX extends GetxController {
       'device_id': deviceId.toString(),
     });
 
+    print(deviceId);
+
     usageData = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
     setUsage(usageData["usage"]);
     setCharge(usageData["charge"]);
@@ -108,8 +111,8 @@ class ElectricGraphGetX extends GetxController {
     var response = await http.post(Uri.parse(url), headers: {
       'Authorization': myToken,
     }, body: {
-      'campsite_id': '1',
-      'category_id': '10',
+      'campsite_id': campId.toString(),
+      'category_id': categoryId.toString(),
     });
 
     setStatusData(jsonDecode(utf8.decode(response.bodyBytes)));
@@ -175,7 +178,7 @@ class ElectricGraphGetX extends GetxController {
     setMax(graphData['max'].toInt());
     setElectricity(spotList);
 
-    print(spotList);
+    // print(spotList);
 
     update();
   }

@@ -87,25 +87,27 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
                         ),
                         Row(
                           children: [
-                            DropdownButton(
-                              value: selected,
-                              items: campDetailController.cMap.keys.map(
-                                (value) {
-                                  return DropdownMenuItem(
-                                    value: value,
-                                    child: Text(value),
-                                  );
+                            Expanded(
+                              child: DropdownButton(
+                                value: selected,
+                                items: campDetailController.cMap.keys.map(
+                                  (value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  },
+                                ).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selected = value;
+                                    selectedId =
+                                        campDetailController.cMap[selected];
+                                    print("selected: " + selected);
+                                    print(campDetailController.cMap[selected]);
+                                  });
                                 },
-                              ).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selected = value;
-                                  selectedId =
-                                      campDetailController.cMap[selected];
-                                  print("selected: " + selected);
-                                  print(campDetailController.cMap[selected]);
-                                });
-                              },
+                              ),
                             ),
                           ],
                         )

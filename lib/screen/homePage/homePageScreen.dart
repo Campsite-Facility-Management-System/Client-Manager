@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:client_manager/container/homePage/campList.dart';
 import 'package:client_manager/function/env.dart';
+import 'package:client_manager/getX/campManagement/campDetailGetX.dart';
 import 'package:client_manager/getX/electric/electricListGetX.dart';
 import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:client_manager/screen/campManagement/addCampScreen.dart';
@@ -18,7 +17,9 @@ class HomePageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final homePageController = Get.put(homePageGetX());
     final listController = Get.put(ElectricInfoGetX());
+    final campDetailController = Get.put(CampDetailGetX());
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Obx(
         () => campList.length == 0
             ? Center(
@@ -48,7 +49,33 @@ class HomePageScreen extends StatelessWidget {
                         controller: homePageController.pageController,
                         itemCount: campList.length,
                         itemBuilder: (context, index) {
-                          return campImg(Env.url + campList[index]['img_url']);
+                          return Stack(
+                            children: [
+                              campImg(Env.url + campList[index]['img_url']),
+                              Positioned(
+                                top: 0,
+                                right: 15,
+                                child: IconButton(
+                                  onPressed: () {
+                                    listController.setSelectedCampId(campList[
+                                            homePageController.currentPage
+                                                .toInt()]['id']
+                                        .toString());
+                                    campDetailController.selectedCampId =
+                                        campList[homePageController.currentPage
+                                                .toInt()]['id']
+                                            .toString();
+
+                                    Get.to(ElectricManager());
+                                  },
+                                  icon: Icon(
+                                    Icons.settings,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
                         },
                       ),
                     ),
@@ -68,15 +95,73 @@ class HomePageScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15),
                       ),
-                      IconButton(
-                          onPressed: () {
-                            listController.setSelectedCampId(
-                                campList[homePageController.currentPage.toInt()]
-                                        ['id']
-                                    .toString());
-                            Get.to(ElectricManager());
-                          },
-                          icon: Icon(Icons.settings)),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 30,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  homePageController.tab.value = 0;
+                                },
+                                child: Container(
+                                  color: homePageController.tab.value == 0
+                                      ? Colors.lightGreen
+                                      : Colors.white,
+                                  child: Center(
+                                    child: Text(
+                                      '예약내역',
+                                      style: TextStyle(
+                                        fontSize:
+                                            homePageController.tab.value == 0
+                                                ? 16
+                                                : 14,
+                                        fontWeight:
+                                            homePageController.tab.value == 0
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  homePageController.tab.value = 1;
+                                },
+                                child: Container(
+                                  color: homePageController.tab.value == 1
+                                      ? Colors.lightGreen
+                                      : Colors.white,
+                                  child: Center(
+                                    child: Text(
+                                      '물품내역',
+                                      style: TextStyle(
+                                        fontSize:
+                                            homePageController.tab.value == 1
+                                                ? 16
+                                                : 14,
+                                        fontWeight:
+                                            homePageController.tab.value == 1
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      homePageController.tab.value == 0
+                          ? reservationList()
+                          : itemList(),
                     ],
                   ),
                 ],
@@ -92,20 +177,83 @@ class HomePageScreen extends StatelessWidget {
     );
   }
 
+  Widget reservationList() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('예약자:'),
+                Text('예약기간:'),
+                Text('카테고리:'),
+                Text('디바이스:'),
+              ],
+            ),
+          );
+        },
+        separatorBuilder: (context, index) {
+          return Divider();
+        },
+      ),
+    );
+  }
+
+  Widget itemList() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('구매자:'),
+                Text('구매물품:'),
+                Text('수량:'),
+              ],
+            ),
+          );
+        },
+        separatorBuilder: (context, index) {
+          return Divider();
+        },
+      ),
+    );
+  }
+
   Widget campImg(String image) {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: Container(
-        height: 220,
-        width: 170,
-        margin: EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: CachedNetworkImageProvider(image),
+      child: Column(
+        children: [
+          Container(
+            height: 190,
+            width: 170,
+            margin: EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: CachedNetworkImageProvider(image),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -86,7 +86,9 @@ class ElectricInfoGetX extends GetxController {
 
     print(response.statusCode.toString());
 
-    await apiElectricCategoryList();
+    Future.delayed(Duration(milliseconds: 200), () async {
+      await apiElectricCategoryList();
+    });
   }
 
   @override

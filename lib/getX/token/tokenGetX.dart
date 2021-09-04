@@ -1,5 +1,6 @@
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/function/mainFunction.dart';
+import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:client_manager/screen/signPage/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,7 @@ class TokenGetX extends GetxController {
   final GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
   static DateTime pressBack;
   final isLoginScreen = false;
+  final homeController = Get.put(homePageGetX());
 
   @override
   onInit() async {
@@ -77,6 +79,7 @@ class TokenGetX extends GetxController {
   login(String email, String passwd) async {
     bool result = await tokenCreate(email, passwd);
     if (result) {
+      homeController.apiCampList();
       Get.to(MainFunction());
     }
   }

@@ -1,11 +1,11 @@
 import 'package:client_manager/container/homePage/profile.dart';
 import 'package:client_manager/getX/token/tokenGetX.dart';
-import 'package:client_manager/screen/electric/electricManager.dart';
 import 'package:client_manager/screen/homePage/homePageScreen.dart';
-import 'package:client_manager/screen/morePage/morePageScreen.dart';
+import 'package:client_manager/screen/myPage/myPageScreen.dart';
 import 'package:client_manager/screen/notificationPage/notiPageScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class MainFunction extends StatefulWidget {
@@ -18,6 +18,7 @@ class _MainFunctionState extends State<MainFunction> {
   List<String> campNameList = [];
   List<String> campIdList = [];
   var selected;
+  DateTime currentBackPressTime;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +26,13 @@ class _MainFunctionState extends State<MainFunction> {
 
     return WillPopScope(
       key: tokenController.globalKey,
-      onWillPop: () async {
-        bool result = tokenController.end();
-        return await Future.value(result);
-      },
+      onWillPop: exit_app
+
+      // () async {
+      //   bool result = tokenController.end();
+      //   return await Future.value(result);
+      // }
+      ,
       child: Scaffold(
         drawer: leftMenu(),
         appBar: AppBar(
@@ -46,6 +50,17 @@ class _MainFunctionState extends State<MainFunction> {
         body: HomePageScreen(),
       ),
     );
+  }
+
+  Future<bool> exit_app() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 1)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: '한 번 더 누르면 앱을 종료합니다.');
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 
   Widget leftMenu() {
@@ -126,6 +141,30 @@ class _MainFunctionState extends State<MainFunction> {
             child: ListTile(
               onTap: () {
                 Get.back();
+              },
+              leading: Icon(
+                Icons.store,
+                color: Colors.green,
+              ),
+              title: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  '물품 관리',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.grey),
+              ),
+            ),
+            child: ListTile(
+              onTap: () {
+                Get.back();
+                Get.to(() => MyPageScreen());
               },
               leading: Icon(
                 Icons.more,

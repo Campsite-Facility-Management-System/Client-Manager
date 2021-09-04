@@ -1,16 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:client_manager/getX/electric/electricGraphGetX.dart';
 import 'package:client_manager/getX/electric/electricListGetX.dart';
+import 'package:client_manager/screen/campManagement/addCategoryScreen.dart';
+import 'package:client_manager/screen/campManagement/addDeviceScreen.dart';
+import 'package:client_manager/screen/electric/electricScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ElectricManager extends StatelessWidget {
+  final graph_Controller = Get.put(ElectricGraphGetX());
+
   @override
   Widget build(BuildContext context) {
     final listController = Get.put(ElectricInfoGetX());
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0x00000000),
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           onPressed: () {
@@ -36,16 +43,52 @@ class ElectricManager extends StatelessWidget {
       ),
       body: Obx(
         () => Container(
+          color: Colors.white,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Container(
-                  alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(left: 20, bottom: 20),
-                  child: Text(
-                    '전력 관리',
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.topLeft,
+                        margin: EdgeInsets.only(left: 20, bottom: 20),
+                        child: Text(
+                          '전력 관리',
+                          style: TextStyle(
+                              fontSize: 32, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right: 20),
+                      child: InkWell(
+                        onTap: () {
+                          Get.to(() => AddCategoryScreen());
+                        },
+                        child: Text(
+                          '+ 카테고리 추가',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right: 20),
+                      child: InkWell(
+                        onTap: () {
+                          Get.to(() => AddDeviceScreen());
+                        },
+                        child: Text(
+                          '+디바이스 추가',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
                 Column(
                   // 카테고리 타일 동적 생성
@@ -122,83 +165,94 @@ class ElectricManager extends StatelessWidget {
                               ? 0
                               : listController.detailData
                                   .value[index]['deviceList']?.length,
-                          (deviceIndex) => Container(
-                            margin: EdgeInsets.only(
-                                left: 10, right: 10, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 2,
-                                  blurRadius: 3,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
+                          (deviceIndex) => InkWell(
+                            onTap: () {
+                              graph_Controller.deviceId =
+                                  listController.detailData.value[index]
+                                      ['deviceList'][deviceIndex]['id'];
+                              graph_Controller.categoryId =
+                                  listController.detailData.value[index]['id'];
+                              graph_Controller.campId =
+                                  listController.selectedCampId;
+                              Get.to(() => ElectricInfoScreen());
+                            },
                             child: Container(
-                              height: 60,
-                              margin: EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text(
-                                      listController.detailData.value[index]
-                                          ['deviceList'][deviceIndex]['name'],
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: const Color(0xff707070),
-                                          shadows: [
-                                            Shadow(
-                                              blurRadius: 10,
-                                              color: Colors.grey,
-                                              offset: Offset(0, 3),
-                                            )
-                                          ]),
-                                    ),
+                              margin: EdgeInsets.only(
+                                  left: 10, right: 10, top: 5, bottom: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 3,
+                                    offset: Offset(0, 3),
                                   ),
-                                  Text(
-                                    listController
-                                            .detailData
-                                            .value[index]['deviceList']
-                                                [deviceIndex]['usage']
-                                            .toString() +
-                                        'kW',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: const Color(0xff999999),
-                                      shadows: [
-                                        Shadow(
-                                          blurRadius: 10,
-                                          color: Colors.grey,
-                                          offset: Offset(0, 3),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  CupertinoSwitch(
-                                      value:
-                                          listController.detailData.value[index]
-                                                          ['deviceList']
-                                                      [deviceIndex]['state'] ==
-                                                  1
-                                              ? true
-                                              : false,
-                                      onChanged: (value) {
-                                        print("now: " +
-                                            listController
-                                                .detailData
-                                                .value[index]['deviceList']
-                                                    [deviceIndex]['state']
-                                                .toString());
-                                        listController.apichangeStatus(
-                                            value,
-                                            listController.detailData
-                                                    .value[index]['deviceList']
-                                                [deviceIndex]['id']);
-                                      })
                                 ],
+                              ),
+                              child: Container(
+                                height: 60,
+                                margin: EdgeInsets.only(left: 20),
+                                child: Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Text(
+                                        listController.detailData.value[index]
+                                            ['deviceList'][deviceIndex]['name'],
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: const Color(0xff707070),
+                                            shadows: [
+                                              Shadow(
+                                                blurRadius: 10,
+                                                color: Colors.grey,
+                                                offset: Offset(0, 3),
+                                              )
+                                            ]),
+                                      ),
+                                    ),
+                                    Text(
+                                      listController
+                                              .detailData
+                                              .value[index]['deviceList']
+                                                  [deviceIndex]['usage']
+                                              .toString() +
+                                          'kW',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: const Color(0xff999999),
+                                        shadows: [
+                                          Shadow(
+                                            blurRadius: 10,
+                                            color: Colors.grey,
+                                            offset: Offset(0, 3),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    CupertinoSwitch(
+                                        value: listController.detailData.value[
+                                                        index]['deviceList']
+                                                    [deviceIndex]['state'] ==
+                                                1
+                                            ? true
+                                            : false,
+                                        onChanged: (value) {
+                                          print("now: " +
+                                              listController
+                                                  .detailData
+                                                  .value[index]['deviceList']
+                                                      [deviceIndex]['state']
+                                                  .toString());
+                                          listController.apichangeStatus(
+                                              value,
+                                              listController.detailData.value[
+                                                      index]['deviceList']
+                                                  [deviceIndex]['id']);
+                                        })
+                                  ],
+                                ),
                               ),
                             ),
                           ),

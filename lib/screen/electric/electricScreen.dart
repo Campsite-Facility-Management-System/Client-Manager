@@ -7,9 +7,13 @@ import 'package:get/get.dart';
 class ElectricInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ElectricGraphGetX());
+    final graph_Controller = Get.put(ElectricGraphGetX());
     final tokenController = Get.put(TokenGetX());
-    controller.loop();
+    graph_Controller.apiDeviceStatus();
+    graph_Controller.apiUsageData();
+    graph_Controller.apiGraph();
+    // graph_Controller.loop();
+
     return WillPopScope(
       onWillPop: () async {
         bool result = tokenController.pop();
@@ -48,8 +52,8 @@ class ElectricInfoScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      controller.deviceName != null
-                                          ? controller.deviceName
+                                      graph_Controller.deviceName != null
+                                          ? graph_Controller.deviceName
                                           : 'loading',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -64,8 +68,8 @@ class ElectricInfoScreen extends StatelessWidget {
                                       style: TextStyle(fontSize: 20),
                                     ),
                                     Text(
-                                      controller.uuid != null
-                                          ? controller.uuid
+                                      graph_Controller.uuid != null
+                                          ? graph_Controller.uuid
                                           : 'loading',
                                       style: TextStyle(fontSize: 20),
                                     ),
@@ -78,12 +82,12 @@ class ElectricInfoScreen extends StatelessWidget {
                                   child: GetBuilder<ElectricGraphGetX>(
                                     builder: (_) {
                                       return Switch(
-                                        value: controller.isSwitched,
+                                        value: graph_Controller.isSwitched,
                                         activeColor: Colors.green,
                                         activeTrackColor: Colors.lightGreen,
                                         onChanged: (value) {
-                                          controller.isSwitched = value;
-                                          controller.apichangeStatus();
+                                          graph_Controller.isSwitched = value;
+                                          graph_Controller.apichangeStatus();
                                         },
                                       );
                                     },
@@ -126,7 +130,7 @@ class ElectricInfoScreen extends StatelessWidget {
                                       height: 20,
                                     ),
                                     Text(
-                                      controller.usage.toString() + "kW",
+                                      graph_Controller.usage.toString() + "kW",
                                       style: TextStyle(fontSize: 30),
                                     ),
                                   ],
@@ -162,7 +166,7 @@ class ElectricInfoScreen extends StatelessWidget {
                                       height: 20,
                                     ),
                                     Text(
-                                      controller.charge.toString() + "원",
+                                      graph_Controller.charge.toString() + "원",
                                       style: TextStyle(fontSize: 30),
                                     ),
                                   ],
@@ -196,8 +200,11 @@ class ElectricInfoScreen extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.only(right: 15, top: 20),
                         child: LineChart(
-                          usageChart(controller.makeSpot(), controller.max,
-                              controller.leftTitle, context),
+                          usageChart(
+                              graph_Controller.makeSpot(),
+                              graph_Controller.max,
+                              graph_Controller.leftTitle,
+                              context),
                         ),
                       ),
                     ),
