@@ -1,4 +1,5 @@
 import 'package:client_manager/function/env.dart';
+import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -11,18 +12,14 @@ class ElectricInfoGetX extends GetxController {
   // var campIdList = List<String>().obs;
   List<String> campNameList = [];
   List<String> campIdList = [];
-  var selectedCampId = ''.obs;
-  var selectedCampName = ''.obs;
+  final homePageController = Get.put(homePageGetX());
+//  var selectedCampId = ''.obs;
   var detailData = List<dynamic>().obs;
 
-  setSelectedCampId(campId) async {
-    selectedCampId.value = campId;
-    await apiElectricCategoryList();
-  }
-
-  setSelectedCampName(campName) {
-    selectedCampName.value = campName;
-  }
+  // setSelectedCampId(campId) async {
+  //   selectedCampId.value = campId;
+  //   await apiElectricCategoryList(campId);
+  // }
 
   apiCampInfo() async {
     var url = Env.url + '/api/campsite/manager/info';
@@ -40,8 +37,7 @@ class ElectricInfoGetX extends GetxController {
       campIdList.add(data[i]['id'].toString());
     }
 
-    setSelectedCampId(campIdList[0]);
-    setSelectedCampName(campNameList[0]);
+    apiElectricCategoryList();
   }
 
   apiElectricCategoryList() async {
@@ -49,10 +45,12 @@ class ElectricInfoGetX extends GetxController {
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
 
+    print(homePageController.selectedCampId.toString());
+
     var response = await http.post(Uri.parse(url), headers: {
       'Authorization': myToken,
     }, body: {
-      'campsite_id': selectedCampId.toString(),
+      'campsite_id': homePageController.selectedCampId.toString(),
     });
 
     detailData.value = jsonDecode(utf8.decode(response.bodyBytes));
@@ -84,8 +82,6 @@ class ElectricInfoGetX extends GetxController {
       'command': status.toString(),
     });
 
-    print(response.statusCode.toString());
-
     Future.delayed(Duration(milliseconds: 200), () async {
       await apiElectricCategoryList();
     });
@@ -95,7 +91,6 @@ class ElectricInfoGetX extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    apiCampInfo();
   }
 
   @override

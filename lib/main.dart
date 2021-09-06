@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:client_manager/screen/campManagement/addDeviceScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +93,7 @@ class MyApp extends StatelessWidget {
       }),
       title: '모닥모닥',
       debugShowCheckedModeBanner: false,
-      home: MainFunction(),
+      home: AddDeviceScreen(),
     );
   }
 }

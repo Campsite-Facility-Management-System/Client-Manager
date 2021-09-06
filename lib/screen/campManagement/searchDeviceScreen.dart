@@ -78,6 +78,8 @@ class SearchDeviceScreenState extends State<SearchDeviceScreen> {
         FlutterBluetoothSerial.instance.startDiscovery().listen((r) {
       setState(() {
         if (r.device.name != null) {
+          print('r: ' + r.toString());
+          print(results.contains(r));
           results.add(r);
         }
       });
@@ -85,11 +87,13 @@ class SearchDeviceScreenState extends State<SearchDeviceScreen> {
 
     print(streamSubscription);
 
-    streamSubscription.onDone(() {
-      setState(() {
-        isDiscovering = false;
-      });
-    });
+    streamSubscription.onDone(
+      () {
+        setState(() {
+          isDiscovering = false;
+        });
+      },
+    );
   }
 
   Future send(Uint8List data) async {
@@ -110,9 +114,8 @@ class SearchDeviceScreenState extends State<SearchDeviceScreen> {
     final controller = Get.put(SetDeviceGetX());
     return Scaffold(
       appBar: AppBar(
-        title: isDiscovering
-            ? Text('Discovering devices')
-            : Text('Discovered devices'),
+        backgroundColor: Colors.green,
+        title: isDiscovering ? Text('디바이스 검색중...') : Text('디바이스 검색완료'),
         actions: <Widget>[
           isDiscovering
               ? FittedBox(

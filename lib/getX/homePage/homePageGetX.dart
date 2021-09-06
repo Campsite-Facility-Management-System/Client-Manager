@@ -12,8 +12,9 @@ class homePageGetX extends GetxController {
   final token = FlutterSecureStorage();
   PageController pageController;
   double viewPortFraction = 0.5;
-  var currentPage = 0.obs; //캠핑장 인덳스
+  var currentPage = 0.obs; //캠핑장 인덱스
   var page = 0.obs;
+  var selectedCampId = ''.obs;
   var tab = 0.obs; //예약내역(0), 물품내역(1)
 
   @override
@@ -52,6 +53,8 @@ class homePageGetX extends GetxController {
     });
 
     campList.value = jsonDecode(utf8.decode(response.bodyBytes)) as List;
+
+    selectedCampId.value = campList[0]['id'].toInt();
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'package:client_manager/container/campManagement/categoryList.dart';
-import 'package:client_manager/getX/campManagement/campDetailGetX.dart';
 import 'package:client_manager/screen/campManagement/addCategoryScreen.dart';
 import 'package:client_manager/screen/campManagement/addDeviceScreen.dart';
 import 'package:flutter/material.dart';

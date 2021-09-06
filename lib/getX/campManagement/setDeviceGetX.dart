@@ -17,22 +17,21 @@ class SetDeviceGetX extends GetxController {
   List<BluetoothDiscoveryResult> results = List<BluetoothDiscoveryResult>();
   bool isDiscovering;
   BluetoothConnection connection;
-  var selectedWifi;
   var password;
   var uuid;
   var wifiList = [];
-  var selectedWifiName;
+  var selectedWifi = 0.obs;
   int count = 0;
 
-  setSelectedWifi(wifiName) {
-    selectedWifi = wifiName;
-    print(selectedWifi);
-  }
-
   sendWifiData(password) async {
-    print(selectedWifi.toString() + ',' + password.toString() + '\r\n');
-    connection.output.add(utf8
-        .encode(selectedWifi.toString() + ',' + password.toString() + '\r\n'));
+    print(wifiList[selectedWifi.value].toString() +
+        ',' +
+        password.toString() +
+        '\r\n');
+    connection.output.add(utf8.encode(wifiList[selectedWifi.value].toString() +
+        ',' +
+        password.toString() +
+        '\r\n'));
     await connection.output.allSent;
   }
 
@@ -68,6 +67,8 @@ class SetDeviceGetX extends GetxController {
   }
 
   receive(Uint8List data) {
+    wifiList.clear();
+
     if (count == 0) {
       print('수신 데이터: ' + Utf8Decoder().convert(data));
 
@@ -75,7 +76,6 @@ class SetDeviceGetX extends GetxController {
       for (int i = 0; i < tmp.length - 1; i++) {
         wifiList.add(tmp[i]);
       }
-      selectedWifi = wifiList[0];
       print('와이파이 리스트: ' + wifiList.toString());
       print('선택된 리스트: ' + selectedWifi.toString());
 
@@ -106,6 +106,8 @@ class SetDeviceGetX extends GetxController {
 
         connection.input.listen(receive).onDone(() {
           //Data entry point
+          print('성공');
+          update();
         });
       } catch (exception) {
         print("수신 오류");

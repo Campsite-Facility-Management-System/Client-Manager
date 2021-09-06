@@ -25,21 +25,31 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text(
+            '디바이스 추가',
+            style: TextStyle(color: Colors.black),
+          ),
+          leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.grey,
+            ),
+          ),
+        ),
         body: SingleChildScrollView(
           child: Container(
+            color: Colors.white,
             padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               children: <Widget>[
-                SizedBox(
-                  height: 100,
-                ),
-                Text(
-                  '디바이스 추가',
-                  style: TextStyle(fontSize: 20),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20, top: 20),
                   child: Form(
@@ -47,6 +57,9 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
                       children: [
                         Row(
                           children: [
+                            Expanded(
+                              child: Text('블루투스로 장치를 검색하세요'),
+                            ),
                             RaisedButton(
                                 child: Text('블루투스 검색'),
                                 onPressed: () => {
@@ -57,14 +70,6 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
                         SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          children: [
-                            Text('디바이스 이름'),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
                         TextFormField(
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -72,10 +77,7 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
                           controller: _name,
                         ),
                         SizedBox(
-                          height: 5,
-                        ),
-                        SizedBox(
-                          height: 5,
+                          height: 20,
                         ),
                         Row(
                           children: [
@@ -85,32 +87,46 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
                         SizedBox(
                           height: 5,
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: DropdownButton(
-                                value: selected,
-                                items: campDetailController.cMap.keys.map(
-                                  (value) {
-                                    return DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  },
-                                ).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selected = value;
-                                    selectedId =
-                                        campDetailController.cMap[selected];
-                                    print("selected: " + selected);
-                                    print(campDetailController.cMap[selected]);
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        )
+
+                        ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: 5,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              alignment: Alignment.centerLeft,
+                              height: 50,
+                              child: Text('category'),
+                            );
+                          },
+                        ),
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: DropdownButton(
+                        //         value: selected,
+                        //         items: campDetailController.cMap.keys.map(
+                        //           (value) {
+                        //             return
+                        //             DropdownMenuItem(
+                        //               value: value,
+                        //               child: Text(value),
+                        //             );
+                        //           },
+                        //         ).toList(),
+                        //         onChanged: (value) {
+                        //           setState(() {
+                        //             selected = value;
+                        //             selectedId =
+                        //                 campDetailController.cMap[selected];
+                        //             print("selected: " + selected);
+                        //             print(campDetailController.cMap[selected]);
+                        //           });
+                        //         },
+                        //       ),
+                        //     ),
+                        //   ],
+                        // )
                       ],
                     ),
                   ),
@@ -118,13 +134,19 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
                 SizedBox(
                   height: 10,
                 ),
-                RaisedButton(
-                  onPressed: () => setDeviceController.upload(
-                    _name.text,
-                    campDetailController.cMap[selected],
-                    campDetailController.selectedCampId,
-                  ),
-                  child: Text('등록하기'),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RaisedButton(
+                        onPressed: () => setDeviceController.upload(
+                          _name.text,
+                          campDetailController.cMap[selected],
+                          campDetailController.selectedCampId,
+                        ),
+                        child: Text('등록하기'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
