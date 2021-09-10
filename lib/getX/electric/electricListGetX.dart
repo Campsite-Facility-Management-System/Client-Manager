@@ -53,9 +53,13 @@ class ElectricInfoGetX extends GetxController {
       'campsite_id': homePageController.selectedCampId.toString(),
     });
 
-    detailData.value = jsonDecode(utf8.decode(response.bodyBytes));
+    print(homePageController.selectedCampId.toString());
 
-    print('data: ' + detailData.toString());
+    var data = utf8.decode(response.bodyBytes);
+
+    detailData.value = jsonDecode(data);
+
+    print(detailData.toString());
   }
 
   apichangeStatus(isSwitched, deviceId) async {

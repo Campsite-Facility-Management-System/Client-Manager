@@ -2,6 +2,7 @@ import 'package:client_manager/function/env.dart';
 import 'package:client_manager/function/addPicture.dart';
 import 'package:client_manager/getX/campManagement/campDetailGetX.dart';
 import 'package:client_manager/getX/electric/electricListGetX.dart';
+import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:client_manager/screen/campManagement/campDetailScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -40,11 +41,12 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
     final campDetailController = Get.put(CampDetailGetX());
+    final home_Controller = Get.put(homePageGetX());
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.headers.addAll({'Authorization': myToken});
     request.fields.addAll({
-      'campsite_id': campDetailController.selectedCampId,
+      'campsite_id': home_Controller.selectedCampId.toString(),
       'name': _name.text,
       'price': _price.text,
       'description': _description.text,
@@ -61,11 +63,14 @@ class AddCategoryScreenState extends State<AddCategoryScreen> {
       }
     }
 
+    print(home_Controller.selectedCampId.toString());
     var response = await request.send();
+
     if (response.statusCode == 200) {
       listController.apiElectricCategoryList();
       Get.back();
     } else {
+      print('aaa: ' + response.reasonPhrase.toString());
       print("error");
     }
   }

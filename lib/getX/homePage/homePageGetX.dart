@@ -1,5 +1,6 @@
 import 'package:client_manager/container/homePage/model/myInfo.dart';
 import 'package:client_manager/function/env.dart';
+import 'package:client_manager/getX/electric/electricListGetX.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -52,9 +53,14 @@ class homePageGetX extends GetxController {
       'Authorization': myToken,
     });
 
-    campList.value = jsonDecode(utf8.decode(response.bodyBytes)) as List;
+    var data = utf8.decode(response.bodyBytes);
+    campList.value = jsonDecode(data) as List;
 
-    selectedCampId.value = campList[0]['id'].toInt();
+    if (campList.length != 0) {
+      selectedCampId.value = campList[0]['id'].toString();
+      final electric_Controller = Get.put(ElectricInfoGetX());
+      electric_Controller.apiElectricCategoryList();
+    }
   }
 
   @override

@@ -53,6 +53,7 @@ class AddCampScreenState extends State<AddCampScreen> {
     print(response.statusCode);
     print(await response.stream.bytesToString());
     if (response.statusCode == 200) {
+      print(response.reasonPhrase);
       Get.to(MainFunction());
     } else if (response.statusCode == 401) {}
   }

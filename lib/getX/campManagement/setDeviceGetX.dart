@@ -4,8 +4,9 @@ import 'dart:typed_data';
 
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/function/mainFunction.dart';
+import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:client_manager/screen/campManagement/addDeviceScreen.dart';
-import 'package:flutter/material.dart';
+import 'package:client_manager/screen/campManagement/models/json_category_list.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -17,11 +18,13 @@ class SetDeviceGetX extends GetxController {
   List<BluetoothDiscoveryResult> results = List<BluetoothDiscoveryResult>();
   bool isDiscovering;
   BluetoothConnection connection;
+  var categoryList = List<JsonCategoryList>().obs;
   var password;
   var uuid;
   var wifiList = [];
   var selectedWifi = 0.obs;
   int count = 0;
+  var selected_Category_Index = 0.obs;
 
   sendWifiData(password) async {
     print(wifiList[selectedWifi.value].toString() +
@@ -33,6 +36,37 @@ class SetDeviceGetX extends GetxController {
         password.toString() +
         '\r\n'));
     await connection.output.allSent;
+  }
+
+  apiCategoryList() async {
+    final home_Controller = Get.put(homePageGetX());
+
+    var url = Env.url + '/api/category/manager/list';
+    String value = await token.read(key: 'token');
+    var headers = {
+      'Authorization': 'Bearer ' + value.toString(),
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.fields
+        .addAll({'campsite_id': home_Controller.selectedCampId.toString()});
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      categoryList.value.clear();
+
+      var data = jsonDecode(await response.stream.bytesToString());
+
+      for (var i = 0; i < data.length; i++) {
+        categoryList.value.add(JsonCategoryList.fromJson(data[i]));
+      }
+
+      print(categoryList.value);
+    } else {
+      print(response.reasonPhrase);
+    }
   }
 
   upload(deviceName, categoryId, campsiteId) async {

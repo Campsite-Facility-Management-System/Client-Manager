@@ -1,12 +1,17 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:client_manager/screen/campManagement/addDeviceScreen.dart';
+import 'package:client_manager/screen/homePage/homePageScreen.dart';
+import 'package:client_manager/screen/signPage/loginScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:client_manager/function/mainFunction.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 import 'getX/fcm/notification_controller.dart';
+
+var fcm_Token;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
@@ -42,6 +47,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
+  final token = new FlutterSecureStorage();
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
@@ -81,6 +88,11 @@ void main() async {
 
   AwesomeNotifications().actionStream.listen((receivedNotification) {});
 
+  FirebaseMessaging.instance.getToken().then((token) {
+    fcm_Token = token;
+  });
+  await token.write(key: 'fcm_token', value: fcm_Token);
+
   runApp(MyApp());
 }
 
@@ -93,7 +105,7 @@ class MyApp extends StatelessWidget {
       }),
       title: '모닥모닥',
       debugShowCheckedModeBanner: false,
-      home: AddDeviceScreen(),
+      home: LoginScreen(),
     );
   }
 }

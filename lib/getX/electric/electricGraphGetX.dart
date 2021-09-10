@@ -8,73 +8,44 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ElectricGraphGetX extends GetxController {
   final token = new FlutterSecureStorage();
-  Map graphData;
-  List<FlSpot> spotList = List();
-  List<int> leftTitle = List();
-  var max = 0;
-  var electricity;
-  var deviceName;
-  var uuid;
-  var usage;
-  var charge;
-  var statusData;
-  var isSwitched = false;
+  Map graphData = Map().obs;
+  List<FlSpot> spotList = List<FlSpot>().obs;
+  // List<int> leftTitle = List<int>().obs;
+  var max = 0.obs;
+  var electricity = [].obs;
+  var deviceName = ''.obs;
+  var uuid = ''.obs;
+  var usage = ''.obs;
+  var charge = ''.obs;
+  var statusData = [].obs;
+  var isSwitched = false.obs;
   Map<String, dynamic> usageData;
-  var campId;
-  var categoryId;
-  var deviceId;
-  var loopStatus = false;
-
-  loop() {
-    const duration = const Duration(seconds: 5);
-    new Timer.periodic(duration, (Timer t) => apiGraph());
-    new Timer.periodic(duration, (Timer t) => apiUsageData());
-  }
-
-  setCampId(camdId) {
-    this.campId = campId;
-  }
-
-  setDeviceId(deviceId) {
-    this.deviceId = deviceId;
-  }
-
-  setMax(max) {
-    this.max = max;
-  }
-
-  setElectricity(electricity) {
-    this.electricity = electricity;
-  }
-
-  setUsage(usage) {
-    this.usage = usage;
-    update();
-  }
-
-  setCharge(charge) {
-    this.charge = charge;
-    update();
-  }
-
-  setStatusData(data) {
-    this.statusData = data;
-    update();
-  }
-
-  setDeviceName(deviceName) {
-    this.deviceName = deviceName;
-    update();
-  }
-
-  setUuid(uuid) {
-    this.uuid = uuid;
-    update();
-  }
+  // var campId;
+  // var categoryId;
+  var deviceId = ''.obs;
+  var do_loop = false.obs;
 
   @override
-  onInit() {
-    super.onInit();
+  onClose() {
+    super.onClose();
+    do_loop.value = false;
+  }
+
+  loop() async {
+    do_loop.value = true;
+    await Future.doWhile(() async {
+      await Future.delayed(Duration(seconds: 5));
+      apiUsageData();
+      apiGraph();
+      if (do_loop.value) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    // const duration = const Duration(seconds: 5);
+    // new Timer.periodic(duration, (Timer t) => apiGraph());
+    // new Timer.periodic(duration, (Timer t) => apiUsageData());
   }
 
   apiUsageData() async {
@@ -93,52 +64,47 @@ class ElectricGraphGetX extends GetxController {
     print(deviceId);
 
     usageData = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-    setUsage(usageData["usage"]);
-    setCharge(usageData["charge"]);
-
-    update();
+    usage.value = usageData["usage"].toString();
+    charge.value = usageData["charge"].toString();
   }
 
-  apiDeviceStatus() async {
-    // tokenFunction.tokenCheck(context);
+  // apiDeviceStatus() async {
+  //   // tokenFunction.tokenCheck(context);
 
-    var url = Env.url + '/api/device/manager/list';
-    String value = await token.read(key: 'token');
-    String myToken = ("Bearer " + value);
+  //   var url = Env.url + '/api/device/manager/list';
+  //   String value = await token.read(key: 'token');
+  //   String myToken = ("Bearer " + value);
 
-    print('확인: ' + campId.toString());
+  //   print('확인: ' + campId.toString());
 
-    var response = await http.post(Uri.parse(url), headers: {
-      'Authorization': myToken,
-    }, body: {
-      'campsite_id': campId.toString(),
-      'category_id': categoryId.toString(),
-    });
+  //   var response = await http.post(Uri.parse(url), headers: {
+  //     'Authorization': myToken,
+  //   }, body: {
+  //     'campsite_id': campId.toString(),
+  //     'category_id': categoryId.toString(),
+  //   });
 
-    setStatusData(jsonDecode(utf8.decode(response.bodyBytes)));
-    if (statusData[0]["state"] == 0) {
-      isSwitched = false;
-    } else if (statusData[0]["state"] == 1) {
-      isSwitched = true;
-    }
-    setDeviceName(statusData[0]["name"]);
-    setUuid(statusData[0]["uuid"]);
+  //   statusData.value = jsonDecode(utf8.decode(response.bodyBytes));
+  //   if (statusData.value[0]["state"] == 0) {
+  //     isSwitched.value = false;
+  //   } else if (statusData[0]["state"] == 1) {
+  //     isSwitched.value = true;
+  //   }
 
-    update();
-  }
+  //   deviceName.value = statusData[0]["name"].toString();
+  //   uuid.value = statusData[0]["uuid"].toString();
+  // }
 
-  apichangeStatus() async {
-    // tokenFunction.tokenCheck(context);
-
+  apichangeStatus(change) async {
     var url = Env.url + '/api/device/manager/controll';
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
     int status;
 
-    if (isSwitched == true) {
-      status = 1;
-    } else {
+    if (change == true) {
       status = 0;
+    } else {
+      status = 1;
     }
 
     // print(status.toString());
@@ -150,7 +116,7 @@ class ElectricGraphGetX extends GetxController {
     });
     print(response.statusCode);
 
-    update();
+    isSwitched.value = change;
   }
 
   apiGraph() async {
@@ -171,16 +137,12 @@ class ElectricGraphGetX extends GetxController {
     graphData = jsonDecode(data) as Map;
     spotList = makeSpot();
     // print(spot.toString());
-    for (int i = 0; i < 5; i++) {
-      leftTitle.add((graphData["max"] / 4 * i).round());
-    }
+    // for (int i = 0; i < 5; i++) {
+    //   leftTitle.add((graphData["max"] / 4 * i).round());
+    // }
 
-    setMax(graphData['max'].toInt());
-    setElectricity(spotList);
-
-    // print(spotList);
-
-    update();
+    max.value = graphData['max'].toInt();
+    electricity.value = spotList;
   }
 
   List<FlSpot> makeSpot() {
@@ -195,11 +157,5 @@ class ElectricGraphGetX extends GetxController {
           i.toDouble(), graphData["electricity"][12 - i]["watt"].toDouble()));
     }
     return spotList;
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
   }
 }

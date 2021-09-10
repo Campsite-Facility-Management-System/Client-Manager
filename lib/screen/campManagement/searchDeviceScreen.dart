@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:client_manager/getX/campManagement/setDeviceGetX.dart';
@@ -8,10 +7,8 @@ import 'package:client_manager/screen/campManagement/setDeviceWifiScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:bluetooth_enable/bluetooth_enable.dart';
 import 'package:android_intent/android_intent.dart';
-import 'package:location/location.dart';
 
 class SearchDeviceScreen extends StatefulWidget {
   final bool start;
@@ -79,7 +76,6 @@ class SearchDeviceScreenState extends State<SearchDeviceScreen> {
       setState(() {
         if (r.device.name != null) {
           print('r: ' + r.toString());
-          print(results.contains(r));
           results.add(r);
         }
       });

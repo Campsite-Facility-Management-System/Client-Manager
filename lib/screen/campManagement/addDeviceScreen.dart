@@ -22,6 +22,7 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
   Widget build(BuildContext context) {
     final campDetailController = Get.put(CampDetailGetX());
     final setDeviceController = Get.put(SetDeviceGetX());
+    setDeviceController.apiCategoryList();
 
     return SafeArea(
       child: Scaffold(
@@ -47,86 +48,95 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
         body: SingleChildScrollView(
           child: Container(
             color: Colors.white,
-            padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 20),
                   child: Form(
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text('블루투스로 장치를 검색하세요'),
-                            ),
-                            RaisedButton(
-                                child: Text('블루투스 검색'),
-                                onPressed: () => {
-                                      Get.to(() => SearchDeviceScreen()),
-                                    }),
-                          ],
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text('블루투스로 장치를 검색하세요'),
+                                  ),
+                                  RaisedButton(
+                                      child: Text('블루투스 검색'),
+                                      onPressed: () => {
+                                            Get.to(() => SearchDeviceScreen()),
+                                          }),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: '디바이스 이름을 입력하세요'),
+                                controller: _name,
+                              ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              Row(
+                                children: [
+                                  Text('카테고리를 선택하세요'),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: '디바이스 이름'),
-                          controller: _name,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Text('카테고리 선택'),
-                          ],
-                        ),
+                        Divider(),
                         SizedBox(
                           height: 5,
                         ),
-
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              alignment: Alignment.centerLeft,
-                              height: 50,
-                              child: Text('category'),
-                            );
-                          },
+                        Obx(
+                          () => setDeviceController.categoryList.value == null
+                              ? Container()
+                              : ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      setDeviceController.categoryList.value ==
+                                              null
+                                          ? 0
+                                          : setDeviceController
+                                              .categoryList.value.length,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        setDeviceController
+                                            .selected_Category_Index
+                                            .value = index;
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            color: setDeviceController
+                                                        .selected_Category_Index
+                                                        .value ==
+                                                    index
+                                                ? Colors.green
+                                                : Colors.white,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20),
+                                            alignment: Alignment.centerLeft,
+                                            height: 50,
+                                            child: Text(setDeviceController
+                                                .categoryList
+                                                .value[index]
+                                                .name),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
                         ),
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       child: DropdownButton(
-                        //         value: selected,
-                        //         items: campDetailController.cMap.keys.map(
-                        //           (value) {
-                        //             return
-                        //             DropdownMenuItem(
-                        //               value: value,
-                        //               child: Text(value),
-                        //             );
-                        //           },
-                        //         ).toList(),
-                        //         onChanged: (value) {
-                        //           setState(() {
-                        //             selected = value;
-                        //             selectedId =
-                        //                 campDetailController.cMap[selected];
-                        //             print("selected: " + selected);
-                        //             print(campDetailController.cMap[selected]);
-                        //           });
-                        //         },
-                        //       ),
-                        //     ),
-                        //   ],
-                        // )
                       ],
                     ),
                   ),
@@ -134,19 +144,22 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: RaisedButton(
-                        onPressed: () => setDeviceController.upload(
-                          _name.text,
-                          campDetailController.cMap[selected],
-                          campDetailController.selectedCampId,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: RaisedButton(
+                          onPressed: () => setDeviceController.upload(
+                            _name.text,
+                            campDetailController.cMap[selected],
+                            campDetailController.selectedCampId,
+                          ),
+                          child: Text('등록하기'),
                         ),
-                        child: Text('등록하기'),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

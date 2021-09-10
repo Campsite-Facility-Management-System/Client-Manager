@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/container/homePage/model/myInfo.dart';
 import 'package:client_manager/getX/homePage/homePageGetX.dart';
-import 'package:client_manager/getX/token/tokenGetX.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';

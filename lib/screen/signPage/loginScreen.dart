@@ -1,6 +1,7 @@
 import 'package:client_manager/getX/fcm/notification_controller.dart';
 import 'package:client_manager/getX/token/tokenGetX.dart';
 import 'package:client_manager/main.dart';
+import 'package:client_manager/screen/homePage/homePageScreen.dart';
 import 'package:client_manager/screen/signPage/signUpScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -15,16 +16,23 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _email = new TextEditingController();
   TextEditingController _passwd = new TextEditingController();
   final token = new FlutterSecureStorage();
+  final tokenController = Get.put(TokenGetX());
 
   @override
   void initState() {
     super.initState();
+    check();
+  }
+
+  check() async {
+    if (await tokenController.tokenCheck()) {
+      Get.off(() => HomePageScreen());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final noti = Get.put(Notification_Controller());
-    final tokenController = Get.put(TokenGetX());
     return WillPopScope(
       onWillPop: () async {
         bool result = tokenController.end();

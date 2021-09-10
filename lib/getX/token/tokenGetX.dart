@@ -1,6 +1,7 @@
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/function/mainFunction.dart';
 import 'package:client_manager/getX/homePage/homePageGetX.dart';
+import 'package:client_manager/main.dart';
 import 'package:client_manager/screen/signPage/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,11 +52,11 @@ class TokenGetX extends GetxController {
   tokenCreate(String email, String passwd) async {
     print("tokenCreate run");
     var r = await token.read(key: 'token');
-    print(r);
     var url = Env.url + '/api/auth/login';
     var response = await http.post(Uri.parse(url), body: {
       'password': passwd,
       'email': email,
+      'fcm_token': fcm_Token.toString(),
     });
 
     print("respone_body: " + response.body);
@@ -65,7 +66,7 @@ class TokenGetX extends GetxController {
       await token.write(key: 'token', value: list['access_token']);
       return true;
     } else {
-      // print("login error");
+      print(response.statusCode);
       flutterToast();
       return false;
     }

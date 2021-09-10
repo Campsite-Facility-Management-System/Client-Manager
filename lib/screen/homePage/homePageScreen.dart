@@ -16,7 +16,6 @@ import 'package:get/get.dart';
 
 class HomePageScreen extends StatelessWidget {
   final token = new FlutterSecureStorage();
-  final graph_Controller = Get.put(ElectricGraphGetX());
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,6 @@ class HomePageScreen extends StatelessWidget {
                           //         .toString();
                           switch (homePageController.tab.value) {
                             case 0:
-                              print('a');
                               await electricController
                                   .apiElectricCategoryList();
                               break;
@@ -296,50 +294,52 @@ class HomePageScreen extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 20,
+        Expanded(
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 20,
+            ),
+            itemCount: 10,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: CachedNetworkImage(
+                            imageUrl:
+                                'http://img.danawa.com/prod_img/500000/232/101/img/2101232_1.jpg?shrink=360:360&_v=20200221134654'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      '장작',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      '2000원',
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
-          itemCount: 10,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: CachedNetworkImage(
-                          imageUrl:
-                              'http://img.danawa.com/prod_img/500000/232/101/img/2101232_1.jpg?shrink=360:360&_v=20200221134654'),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    '장작',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    '2000원',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
         ),
         SizedBox(
           height: 20,
@@ -442,8 +442,9 @@ class HomePageScreen extends StatelessWidget {
                       placeholder: (context, url) =>
                           CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl:
-                          'https://assets.gadgets360cdn.com/img/crypto/dogecoin-og-logo.png',
+                      imageUrl: Env.url +
+                          electricController.detailData.value[index]['img_url']
+                              .toString(),
                     ),
                   ),
                 ),
@@ -477,13 +478,15 @@ class HomePageScreen extends StatelessWidget {
                           .detailData.value[index]['deviceList']?.length,
                   (deviceIndex) => InkWell(
                     onTap: () {
-                      graph_Controller.deviceId = electricController.detailData
-                          .value[index]['deviceList'][deviceIndex]['id'];
-                      graph_Controller.categoryId =
-                          electricController.detailData.value[index]['id'];
-                      graph_Controller.campId =
-                          homePageController.selectedCampId.value;
-                      Get.to(() => ElectricInfoScreen());
+                      // graph_Controller.deviceId = electricController.detailData
+                      //     .value[index]['deviceList'][deviceIndex]['id'];
+                      // graph_Controller.categoryId =
+                      //     electricController.detailData.value[index]['id'];
+                      // graph_Controller.campId =
+                      //     homePageController.selectedCampId.value;
+                      Get.to(() => ElectricInfoScreen(electricController
+                          .detailData
+                          .value[index]['deviceList'][deviceIndex]['id']));
                     },
                     child: Container(
                       margin: EdgeInsets.only(
