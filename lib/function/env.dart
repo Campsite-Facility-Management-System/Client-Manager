@@ -1,3 +1,3 @@
 class Env {
-  static String url = 'http://blazingcode.asuscomm.com';
+  static String url = 'http://blazingcode.duckdns.org';
 }

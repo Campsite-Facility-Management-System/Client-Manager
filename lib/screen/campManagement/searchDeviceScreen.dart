@@ -71,11 +71,17 @@ class SearchDeviceScreenState extends State<SearchDeviceScreen> {
 
   _startDiscovery() async {
     print("검색 시작");
+    var name = [];
     streamSubscription =
         FlutterBluetoothSerial.instance.startDiscovery().listen((r) {
       setState(() {
-       print('r: ' + r.toString());
-          results.add(r);
+        if (r.device.name != null) {
+          print('r: ' + r.device.name.toString());
+          if (!name.contains(r.device.name)) {
+            name.add(r.device.name);
+            results.add(r);
+          }
+        }
       });
     });
 
@@ -135,7 +141,7 @@ class SearchDeviceScreenState extends State<SearchDeviceScreen> {
             rssi: result.rssi,
             onTap: () {
               controller.connect(result.device.address);
-              Get.off(SetDeviceWifiScreen());
+              Get.off(() => SetDeviceWifiScreen(result.device.address));
             },
             onLongPress: () async {
               try {

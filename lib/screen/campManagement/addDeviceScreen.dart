@@ -1,20 +1,21 @@
 import 'package:client_manager/getX/campManagement/campDetailGetX.dart';
 import 'package:client_manager/getX/campManagement/setDeviceGetX.dart';
+import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:client_manager/screen/campManagement/searchDeviceScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
-class AddDeviceScreen extends StatefulWidget {
-  @override
-  AddDeviceScreenState createState() => AddDeviceScreenState();
-}
+// class AddDeviceScreen extends StatefulWidget {
+//   @override
+//   AddDeviceScreenState createState() => AddDeviceScreenState();
+// }
 
-class AddDeviceScreenState extends State<AddDeviceScreen> {
+class AddDeviceScreen extends StatelessWidget {
   var uuid;
   TextEditingController _name = new TextEditingController();
   final token = new FlutterSecureStorage();
-
+  final homepageController = Get.put(homePageGetX());
   var selected;
   var selectedId;
 
@@ -22,8 +23,6 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
   Widget build(BuildContext context) {
     final campDetailController = Get.put(CampDetailGetX());
     final setDeviceController = Get.put(SetDeviceGetX());
-    setDeviceController.apiCategoryList();
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -61,7 +60,15 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
                               Row(
                                 children: [
                                   Expanded(
-                                    child: Text('블루투스로 장치를 검색하세요'),
+                                    child: Obx(
+                                      () => Text(setDeviceController
+                                                  .connectedWifiName.value ==
+                                              ''
+                                          ? '블루투스로 장치를 검색하세요'
+                                          : setDeviceController
+                                              .connectedWifiName.value
+                                              .toString()),
+                                    ),
                                   ),
                                   RaisedButton(
                                       child: Text('블루투스 검색'),
@@ -94,49 +101,52 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
                         SizedBox(
                           height: 5,
                         ),
-                        Obx(
-                          () => setDeviceController.categoryList.value == null
-                              ? Container()
-                              : ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount:
-                                      setDeviceController.categoryList.value ==
-                                              null
-                                          ? 0
-                                          : setDeviceController
-                                              .categoryList.value.length,
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        setDeviceController
-                                            .selected_Category_Index
-                                            .value = index;
-                                      },
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            color: setDeviceController
-                                                        .selected_Category_Index
-                                                        .value ==
-                                                    index
-                                                ? Colors.green
-                                                : Colors.white,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 20),
-                                            alignment: Alignment.centerLeft,
-                                            height: 50,
-                                            child: Text(setDeviceController
-                                                .categoryList
-                                                .value[index]
-                                                .name),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                        ),
+                        FutureBuilder(
+                          future: setDeviceController.apiCategoryList(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData == false) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                child: Text('error'),
+                              );
+                            } else {
+                              return ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount:
+                                    setDeviceController.categoryList.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      setDeviceController
+                                          .selected_Category_Index
+                                          .value = index;
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          color: setDeviceController
+                                                      .selected_Category_Index
+                                                      .value ==
+                                                  index
+                                              ? Colors.green
+                                              : Colors.white,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          alignment: Alignment.centerLeft,
+                                          height: 50,
+                                          child: Text(setDeviceController
+                                              .categoryList.value[index].name),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -152,8 +162,12 @@ class AddDeviceScreenState extends State<AddDeviceScreen> {
                         child: RaisedButton(
                           onPressed: () => setDeviceController.upload(
                             _name.text,
-                            campDetailController.cMap[selected],
-                            campDetailController.selectedCampId,
+                            setDeviceController
+                                .categoryList
+                                .value[setDeviceController
+                                    .selected_Category_Index.value]
+                                .id,
+                            homepageController.selectedCampId,
                           ),
                           child: Text('등록하기'),
                         ),

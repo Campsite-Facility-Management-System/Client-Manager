@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SetDeviceWifiScreen extends StatefulWidget {
+  var address;
+  SetDeviceWifiScreen(this.address);
+
   @override
   SetDeviceWifiScreenState createState() => SetDeviceWifiScreenState();
 }
@@ -118,8 +121,9 @@ class SetDeviceWifiScreenState extends State<SetDeviceWifiScreen> {
                     Expanded(
                       child: RaisedButton(
                         child: Text('연결하기'),
-                        onPressed: () => {
-                          controller.sendWifiData(password.text),
+                        onPressed: () async => {
+                          await controller.sendWifiData(
+                              widget.address, password.text),
                         },
                       ),
                     ),

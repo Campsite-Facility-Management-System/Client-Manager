@@ -36,7 +36,7 @@ dependencies:
   fluttertoast: ^4.0.1
   get: ^3.26.0
   permission_handler: ^8.1.1
-  flutter_bluetooth_serial: ^0.2.2
+  flutter_bluetooth_serial: ^0.4.0
   bluetooth_enable: ^0.1.1
   android_intent: ^2.0.2
   location: ^4.3.0

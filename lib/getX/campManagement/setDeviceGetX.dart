@@ -25,22 +25,16 @@ class SetDeviceGetX extends GetxController {
   var selectedWifi = 0.obs;
   int count = 0;
   var selected_Category_Index = 0.obs;
+  var connectedWifiName = ''.obs;
 
-  sendWifiData(password) async {
-    print(wifiList[selectedWifi.value].toString() +
-        ',' +
-        password.toString() +
-        '\r\n');
-    connection.output.add(utf8.encode(wifiList[selectedWifi.value].toString() +
-        ',' +
-        password.toString() +
-        '\r\n'));
-    await connection.output.allSent;
-
-    
+  @override
+  onInit() {
+    super.onInit();
+    apiCategoryList();
   }
 
   apiCategoryList() async {
+    print('run');
     final home_Controller = Get.put(homePageGetX());
 
     var url = Env.url + '/api/category/manager/list';
@@ -65,30 +59,31 @@ class SetDeviceGetX extends GetxController {
         categoryList.value.add(JsonCategoryList.fromJson(data[i]));
       }
 
-      print(categoryList.value);
+      return categoryList;
     } else {
       print(response.reasonPhrase);
     }
   }
 
   upload(deviceName, categoryId, campsiteId) async {
-    print('디바이스: ' + deviceName.toString());
-    print('카테고리id: ' + categoryId.toString());
-    print('캠프id: ' + campsiteId.toString());
-    print('uuid: ' + uuid.toString());
-
     var url = Env.url + '/api/device/manager/add';
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.headers.addAll({'Authorization': myToken});
+    request.headers.addAll({'Authorization': myToken.toString()});
     request.fields.addAll({
       'name': deviceName.toString(),
       'uuid': uuid.toString(),
       'category_id': categoryId.toString(),
       'campsite_id': campsiteId.toString(),
     });
+
+    print('토큰 : ' + myToken.toString());
+    print('디바이스: ' + deviceName.toString());
+    print('카테고리id: ' + categoryId.toString());
+    print('캠프id: ' + campsiteId.toString());
+    print('uuid: ' + uuid.toString());
 
     var response = await request.send();
     print(response.statusCode);
@@ -102,36 +97,6 @@ class SetDeviceGetX extends GetxController {
     }
   }
 
-  receive(Uint8List data) {
-    wifiList.clear();
-
-    if (count == 0) {
-      print('수신 데이터: ' + Utf8Decoder().convert(data));
-
-      var tmp = Utf8Decoder().convert(data).split(',');
-      for (int i = 0; i < tmp.length - 1; i++) {
-        wifiList.add(tmp[i]);
-      }
-      print('와이파이 리스트: ' + wifiList.toString());
-      print('선택된 리스트: ' + selectedWifi.toString());
-
-      count++;
-      update();
-    } else if (count == 1) {
-      var tmp = Utf8Decoder().convert(data).split(',');
-      if (tmp[0] == '0') {
-        print("error");
-      } else {
-        uuid = tmp[1];
-        print(uuid);
-      }
-      count = 0;
-      update();
-      connection.close();
-      Get.offAll(AddDeviceScreen());
-    }
-  }
-
   connect(String address) async {
     try {
       connection = await BluetoothConnection.toAddress(address);
@@ -140,10 +105,40 @@ class SetDeviceGetX extends GetxController {
         connection.output.add(utf8.encode('0' + '\r\n'));
         await connection.output.allSent;
 
-        connection.input.listen(receive).onDone(() {
-          //Data entry point
-          print('성공');
-          update();
+        connection.input.listen((data) {
+          if (count == 0) {
+            wifiList.clear();
+
+            print('수신 데이터: ' + Utf8Decoder().convert(data));
+
+            var tmp = Utf8Decoder().convert(data).split(',');
+            for (int i = 0; i < tmp.length - 1; i++) {
+              wifiList.add(tmp[i]);
+            }
+            print('와이파이 리스트: ' + wifiList.toString());
+            print('선택된 리스트: ' + selectedWifi.toString());
+
+            count++;
+            update();
+          } else if (count == 1) {
+            var tmp = Utf8Decoder().convert(data).split(',');
+            print('tmp: ' + tmp.toString());
+            if (tmp[0] == '0') {
+              print("error");
+            } else {
+              connectedWifiName.value = wifiList[selectedWifi.value].toString();
+              uuid = tmp[1].toString();
+              print('uuid + ' + uuid.toString());
+              update();
+              count = 0;
+              connection.finish();
+              Get.back();
+            }
+          }
+        }).onDone(() {
+          print('onDone');
+          count = 0;
+          connection.finish();
         });
       } catch (exception) {
         print("수신 오류");
@@ -153,4 +148,35 @@ class SetDeviceGetX extends GetxController {
       print('커넥트 결과: Cannot connect, exception occured');
     }
   }
+
+  sendWifiData(address, password) async {
+    connection.output.add(utf8.encode(wifiList[selectedWifi.value].toString() +
+        ',' +
+        password.toString() +
+        '\r\n'));
+    print(wifiList[selectedWifi.value].toString() +
+        ',' +
+        password.toString() +
+        '\r\n');
+    print(await connection.output.allSent);
+  }
+
+  // passReceive(Uint8List data) {
+  //   print("수신 데이터!!" + Utf8Decoder().convert(data));
+
+  //   var tmp = Utf8Decoder().convert(data).split(',');
+  //   print(tmp);
+  //   if (tmp[0] == '0') {
+  //     print("error");
+  //   } else {
+  //     uuid = tmp[1];
+  //     print(uuid);
+  //   }
+  //   count = 0;
+
+  //   print('성공!!!');
+  //   connection.finish();
+  //   Get.back();
+  //   connection.finish();
+  // }
 }
