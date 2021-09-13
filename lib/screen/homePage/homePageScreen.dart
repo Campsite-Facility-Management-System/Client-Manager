@@ -240,7 +240,7 @@ class HomePageScreen extends StatelessWidget {
                             return electric();
                             break;
                           case 1:
-                            return item();
+                            return item(context);
                             break;
                           case 2:
                             return reservationList();
@@ -266,7 +266,7 @@ class HomePageScreen extends StatelessWidget {
     );
   }
 
-  Widget item() {
+  Widget item(context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -294,7 +294,8 @@ class HomePageScreen extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        Expanded(
+        Container(
+          width: MediaQuery.of(context).size.width,
           child: GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -305,6 +306,8 @@ class HomePageScreen extends StatelessWidget {
             itemCount: 10,
             itemBuilder: (BuildContext context, int index) {
               return Container(
+                height: MediaQuery.of(context).size.height / 4,
+                width: MediaQuery.of(context).size.width / 2,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

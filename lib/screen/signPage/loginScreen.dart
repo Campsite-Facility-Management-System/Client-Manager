@@ -1,3 +1,4 @@
+import 'package:client_manager/function/mainFunction.dart';
 import 'package:client_manager/getX/fcm/notification_controller.dart';
 import 'package:client_manager/getX/token/tokenGetX.dart';
 import 'package:client_manager/main.dart';
@@ -26,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   check() async {
     if (await tokenController.tokenCheck()) {
-      Get.off(() => HomePageScreen());
+      Get.off(() => MainFunction());
     }
   }
 

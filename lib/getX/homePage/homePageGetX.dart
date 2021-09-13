@@ -38,9 +38,9 @@ class homePageGetX extends GetxController {
     Map<String, dynamic> list = jsonDecode(response.body);
 
     return MyInfo(
-      nick: list['nick_name'],
+      nick: list['nickname'],
       point: list['point'].toString(),
-      img_url: list['profile_img'].toString(),
+      img_url: list['profile_img_url'].toString(),
     );
   }
 

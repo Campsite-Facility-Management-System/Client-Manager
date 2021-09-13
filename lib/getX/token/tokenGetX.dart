@@ -81,7 +81,7 @@ class TokenGetX extends GetxController {
     bool result = await tokenCreate(email, passwd);
     if (result) {
       homeController.apiCampList();
-      Get.to(MainFunction());
+      Get.off(MainFunction());
     }
   }
 
