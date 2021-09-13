@@ -36,6 +36,8 @@ class SetDeviceGetX extends GetxController {
         password.toString() +
         '\r\n'));
     await connection.output.allSent;
+
+    
   }
 
   apiCategoryList() async {

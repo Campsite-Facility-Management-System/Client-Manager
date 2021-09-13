@@ -74,10 +74,8 @@ class SearchDeviceScreenState extends State<SearchDeviceScreen> {
     streamSubscription =
         FlutterBluetoothSerial.instance.startDiscovery().listen((r) {
       setState(() {
-        if (r.device.name != null) {
-          print('r: ' + r.toString());
+       print('r: ' + r.toString());
           results.add(r);
-        }
       });
     });
 

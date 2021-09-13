@@ -1,11 +1,8 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:client_manager/screen/campManagement/addDeviceScreen.dart';
-import 'package:client_manager/screen/homePage/homePageScreen.dart';
 import 'package:client_manager/screen/signPage/loginScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:client_manager/function/mainFunction.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
