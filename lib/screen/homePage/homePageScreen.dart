@@ -295,30 +295,23 @@ class HomePageScreen extends StatelessWidget {
           height: 20,
         ),
         Container(
-          width: MediaQuery.of(context).size.width,
           child: GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: 20,
+              childAspectRatio: 3 / 4,
             ),
-            itemCount: 10,
+            itemCount: 4,
             itemBuilder: (BuildContext context, int index) {
               return Container(
-                height: MediaQuery.of(context).size.height / 4,
-                width: MediaQuery.of(context).size.width / 2,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Expanded(
-                      child: FittedBox(
-                        fit: BoxFit.cover,
-                        child: CachedNetworkImage(
-                            imageUrl:
-                                'http://img.danawa.com/prod_img/500000/232/101/img/2101232_1.jpg?shrink=360:360&_v=20200221134654'),
-                      ),
-                    ),
+                    CachedNetworkImage(
+                        imageUrl:
+                            'http://img.danawa.com/prod_img/500000/232/101/img/2101232_1.jpg?shrink=360:360&_v=20200221134654'),
                     SizedBox(
                       height: 5,
                     ),
