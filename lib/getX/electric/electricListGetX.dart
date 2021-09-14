@@ -41,6 +41,8 @@ class ElectricInfoGetX extends GetxController {
   }
 
   apiElectricCategoryList() async {
+    print('run');
+
     var url = Env.url + '/api/device/manager/energy/list';
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);

@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ElectricInfoScreen extends StatelessWidget {
-  var deviceId;
-  ElectricInfoScreen(this.deviceId);
+  var data;
+  ElectricInfoScreen(this.data);
 
   @override
   Widget build(BuildContext context) {
@@ -15,246 +15,245 @@ class ElectricInfoScreen extends StatelessWidget {
     final tokenController = Get.put(TokenGetX());
     final electricController = Get.put(ElectricInfoGetX());
 
+    graph_Controller.apiDeviceState();
+
     // graph_Controller.apiDeviceStatus();
-    graph_Controller.deviceId.value = this.deviceId.toString();
+    graph_Controller.deviceId.value = this.data['id'].toString();
     graph_Controller.apiUsageData();
     graph_Controller.apiGraph();
     graph_Controller.do_loop();
 
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.green,
-        title: Text('기기정보'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 40, right: 70, top: 10, bottom: 10),
-                        width: 150,
-                        height: 200,
-                        decoration: BoxDecoration(
-                            border: Border.all(width: 0.5, color: Colors.white),
+    return WillPopScope(
+      onWillPop: (){
+        electricController.apiElectricCategoryList();
+        Get.back();
+        return;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.green,
+          title: Text('기기정보'),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: 40, right: 70, top: 10, bottom: 10),
+                          width: 150,
+                          height: 200,
+                          decoration: BoxDecoration(
+                              border: Border.all(width: 0.5, color: Colors.white),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.white),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Text(
+                                  data['name'] != null
+                                      ? data['name']
+                                      : 'loading',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 30),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Obx(()=> Container(
+                          child: Transform.scale(
+                            scale: 4.0,
+                            child: Switch(
+                              value: graph_Controller.isSwitched.value,
+                              activeColor: Colors.green,
+                              activeTrackColor: Colors.lightGreen,
+                              onChanged: (value) {
+                                graph_Controller.apichangeStatus(value);
+                              },
+                            ),
+                          ),
+                        ),),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: 20, right: 20, top: 10, bottom: 10),
+                          width: 150,
+                          height: 150,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 0.5, color: Colors.grey),
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.circular(5),
-                            color: Colors.white),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              graph_Controller.deviceName.value != null
-                                  ? graph_Controller.deviceName.value
-                                  : 'loading',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 30),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              '<uuid>',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Text(
-                              graph_Controller.uuid.value != null
-                                  ? graph_Controller.uuid.value
-                                  : 'loading',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ],
+                            color: Colors.grey[300],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.electrical_services_outlined),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    '사용량',
+                                    style: TextStyle(fontSize: 25),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Obx(() => Text(
+                                graph_Controller.usage.value != null
+                                    ? graph_Controller.usage.value.toString() +
+                                        "kW"
+                                    : 'loading...',
+                                style: TextStyle(fontSize: 30),
+                              ),),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        child: Transform.scale(
-                          scale: 4.0,
-                          child: Switch(
-                            value: graph_Controller.isSwitched.value,
-                            activeColor: Colors.green,
-                            activeTrackColor: Colors.lightGreen,
-                            onChanged: (value) {
-                              graph_Controller.apichangeStatus(value);
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: 10, right: 20, top: 10, bottom: 10),
+                          width: 150,
+                          height: 150,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 0.5, color: Colors.grey),
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.grey[300],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.money_rounded),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    '예상요금',
+                                    style: TextStyle(fontSize: 25),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Obx(() => Text(
+                                graph_Controller.charge.value != null
+                                    ? graph_Controller.charge.toString() + "원"
+                                    : 'loading...',
+                                style: TextStyle(fontSize: 30),
+                              ),),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 30),
+                child: Text('전력 사용량 그래프'),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Obx(() => graph_Controller.spotList == null?Center(child: CircularProgressIndicator()):
+              AspectRatio(
+                aspectRatio: 1.5,
+                child: Container(
+                  margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 15, top: 20),
+                    child: LineChart(
+                      LineChartData(
+                        gridData: FlGridData(
+                          show: false,
+                          drawVerticalLine: true,
+                          getDrawingHorizontalLine: (value) {
+                            return FlLine(
+                              color: Colors.white,
+                              strokeWidth: 1,
+                            );
+                          },
+                          getDrawingVerticalLine: (value) {
+                            return FlLine(
+                              color: Colors.white,
+                              strokeWidth: 1,
+                            );
+                          },
+                        ),
+                        titlesData: FlTitlesData(
+                          leftTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 30,
+                            
+                            margin: 10,
+                            interval: 1,
+                            getTitles: (value) {
+                              if (value.toInt() == 0) {
+                                return '0';
+                              }
+    
+                              if (value.toInt() ==
+                                  graph_Controller.max.value.toInt()) {
+                                return graph_Controller.max.value.toString();
+                              }
+    
+                              return '';
                             },
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 20, right: 20, top: 10, bottom: 10),
-                        width: 150,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 0.5, color: Colors.grey),
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.grey[300],
+                        borderData: FlBorderData(
+                          show: true,
+                          border: Border.all(color: Colors.green, width: 1),
                         ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.electrical_services_outlined),
-                                SizedBox(width: 5),
-                                Text(
-                                  '사용량',
-                                  style: TextStyle(fontSize: 25),
-                                ),
-                              ],
+                        minX: 0,
+                        maxX: 13,
+                        minY: -2,
+                        maxY: graph_Controller.max.value * 1.2,
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: graph_Controller.spotList,
+                            isCurved: true,
+                            barWidth: 5,
+                            dotData: FlDotData(
+                              show: true,
                             ),
-                            SizedBox(
-                              height: 20,
+                            belowBarData: BarAreaData(
+                              show: false,
                             ),
-                            Text(
-                              graph_Controller.usage.value != null
-                                  ? graph_Controller.usage.value.toString() +
-                                      "kW"
-                                  : 'loading...',
-                              style: TextStyle(fontSize: 30),
-                            ),
-                          ],
-                        ),
+                          )
+                        ],
                       ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 10, right: 20, top: 10, bottom: 10),
-                        width: 150,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 0.5, color: Colors.grey),
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.grey[300],
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.money_rounded),
-                                SizedBox(width: 5),
-                                Text(
-                                  '예상요금',
-                                  style: TextStyle(fontSize: 25),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              graph_Controller.charge.value != null
-                                  ? graph_Controller.charge.toString() + "원"
-                                  : 'loading...',
-                              style: TextStyle(fontSize: 30),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: EdgeInsets.only(left: 30),
-              child: Text('전력 사용량 그래프'),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            AspectRatio(
-              aspectRatio: 1.5,
-              child: Container(
-                margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                child: Padding(
-                  padding: EdgeInsets.only(right: 15, top: 20),
-                  child: LineChart(
-                    LineChartData(
-                      gridData: FlGridData(
-                        show: false,
-                        drawVerticalLine: true,
-                        getDrawingHorizontalLine: (value) {
-                          return FlLine(
-                            color: Colors.white,
-                            strokeWidth: 1,
-                          );
-                        },
-                        getDrawingVerticalLine: (value) {
-                          return FlLine(
-                            color: Colors.white,
-                            strokeWidth: 1,
-                          );
-                        },
-                      ),
-                      titlesData: FlTitlesData(
-                        leftTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 30,
-                          getTextStyles: (value) => const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                          ),
-                          margin: 10,
-                          interval: 1,
-                          getTitles: (value) {
-                            if (value.toInt() == 0) {
-                              return '0';
-                            }
-
-                            if (value.toInt() ==
-                                graph_Controller.max.value.toInt()) {
-                              return graph_Controller.max.value.toString();
-                            }
-
-                            return '';
-                          },
-                        ),
-                      ),
-                      borderData: FlBorderData(
-                        show: true,
-                        border: Border.all(color: Colors.green, width: 1),
-                      ),
-                      minX: 0,
-                      maxX: 13,
-                      minY: -2,
-                      maxY: graph_Controller.max.value * 1.2,
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: graph_Controller.spotList,
-                          isCurved: true,
-                          barWidth: 5,
-                          dotData: FlDotData(
-                            show: true,
-                          ),
-                          belowBarData: BarAreaData(
-                            show: false,
-                          ),
-                        )
-                      ],
                     ),
                   ),
                 ),
-              ),
-            ),
-          ],
+              ),),
+            ],
+          ),
         ),
       ),
     );

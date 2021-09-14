@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/function/mainFunction.dart';
+import 'package:client_manager/getX/electric/electricListGetX.dart';
 import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:client_manager/screen/campManagement/addDeviceScreen.dart';
 import 'package:client_manager/screen/campManagement/models/json_category_list.dart';
@@ -27,6 +28,7 @@ class SetDeviceGetX extends GetxController {
   var selected_Category_Index = 0.obs;
   var connectedWifiName = ''.obs;
   var isSending = false.obs;
+  final electricController = Get.put(ElectricInfoGetX());
 
   @override
   onInit() {
@@ -134,6 +136,7 @@ class SetDeviceGetX extends GetxController {
               update();
               count = 0;
               connection.finish();
+              electricController.apiElectricCategoryList();
               Get.back();
             }
             isSending.value = false;

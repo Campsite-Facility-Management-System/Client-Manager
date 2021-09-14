@@ -482,7 +482,7 @@ class HomePageScreen extends StatelessWidget {
                       //     homePageController.selectedCampId.value;
                       Get.to(() => ElectricInfoScreen(electricController
                           .detailData
-                          .value[index]['deviceList'][deviceIndex]['id']));
+                          .value[index]['deviceList'][deviceIndex]));
                     },
                     child: Container(
                       margin: EdgeInsets.only(
@@ -539,25 +539,19 @@ class HomePageScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            CupertinoSwitch(
+                            Obx(()=>CupertinoSwitch(
                                 value: electricController.detailData
                                                 .value[index]['deviceList']
                                             [deviceIndex]['state'] ==
-                                        1
+                                        '1'
                                     ? true
                                     : false,
                                 onChanged: (value) {
-                                  print("now: " +
-                                      electricController
-                                          .detailData
-                                          .value[index]['deviceList']
-                                              [deviceIndex]['state']
-                                          .toString());
                                   electricController.apichangeStatus(
                                       value,
                                       electricController.detailData.value[index]
                                           ['deviceList'][deviceIndex]['id']);
-                                })
+                                },),),
                           ],
                         ),
                       ),
