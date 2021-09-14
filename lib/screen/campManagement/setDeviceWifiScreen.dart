@@ -114,14 +114,17 @@ class SetDeviceWifiScreenState extends State<SetDeviceWifiScreen> {
               SizedBox(
                 height: 10,
               ),
-              Container(
+              Obx(() => Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
                     Expanded(
-                      child: RaisedButton(
+                      child: 
+                      controller.isSending.value? Center(child: CircularProgressIndicator()):
+                      RaisedButton(
                         child: Text('연결하기'),
                         onPressed: () async => {
+                        
                           await controller.sendWifiData(
                               widget.address, password.text),
                         },
@@ -129,7 +132,7 @@ class SetDeviceWifiScreenState extends State<SetDeviceWifiScreen> {
                     ),
                   ],
                 ),
-              )
+              ),),
             ],
           ),
         )),

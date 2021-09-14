@@ -133,7 +133,7 @@ class ElectricGraphGetX extends GetxController {
       'device_id': deviceId.toString(),
     });
     var data = utf8.decode(response.bodyBytes);
-    // print("data: " + data.toString());
+    print("data: " + data.toString());
     graphData = jsonDecode(data) as Map;
     spotList = makeSpot();
     // print(spot.toString());

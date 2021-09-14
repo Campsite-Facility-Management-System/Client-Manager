@@ -26,6 +26,7 @@ class SetDeviceGetX extends GetxController {
   int count = 0;
   var selected_Category_Index = 0.obs;
   var connectedWifiName = ''.obs;
+  var isSending = false.obs;
 
   @override
   onInit() {
@@ -91,7 +92,7 @@ class SetDeviceGetX extends GetxController {
     print(response.stream.bytesToString());
 
     if (response.statusCode == 200) {
-      Get.offAll(MainFunction());
+      Get.back();
     } else if (response.statusCode == 401) {
       // print("error");
     }
@@ -120,6 +121,7 @@ class SetDeviceGetX extends GetxController {
 
             count++;
             update();
+            isSending.value = false;
           } else if (count == 1) {
             var tmp = Utf8Decoder().convert(data).split(',');
             print('tmp: ' + tmp.toString());
@@ -134,22 +136,30 @@ class SetDeviceGetX extends GetxController {
               connection.finish();
               Get.back();
             }
+            isSending.value = false;
+
           }
         }).onDone(() {
           print('onDone');
           count = 0;
-          connection.finish();
+          connection.finish();              
+          isSending.value = false;
         });
       } catch (exception) {
         print("수신 오류");
         print(exception);
+        isSending.value = false;
+
       }
     } catch (exception) {
       print('커넥트 결과: Cannot connect, exception occured');
+      isSending.value = false;
+
     }
   }
 
   sendWifiData(address, password) async {
+    isSending.value = true;
     connection.output.add(utf8.encode(wifiList[selectedWifi.value].toString() +
         ',' +
         password.toString() +
@@ -158,7 +168,7 @@ class SetDeviceGetX extends GetxController {
         ',' +
         password.toString() +
         '\r\n');
-    print(await connection.output.allSent);
+    await connection.output.allSent;
   }
 
   // passReceive(Uint8List data) {

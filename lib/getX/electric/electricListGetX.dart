@@ -45,21 +45,14 @@ class ElectricInfoGetX extends GetxController {
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
 
-    print(homePageController.selectedCampId.toString());
-
     var response = await http.post(Uri.parse(url), headers: {
       'Authorization': myToken,
     }, body: {
       'campsite_id': homePageController.selectedCampId.toString(),
     });
 
-    print(homePageController.selectedCampId.toString());
-
     var data = utf8.decode(response.bodyBytes);
-
     detailData.value = jsonDecode(data);
-
-    print(detailData.toString());
   }
 
   apichangeStatus(isSwitched, deviceId) async {

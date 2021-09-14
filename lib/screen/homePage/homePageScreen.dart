@@ -20,8 +20,6 @@ class HomePageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homePageController = Get.put(homePageGetX());
-    final listController = Get.put(ElectricInfoGetX());
-    final campDetailController = Get.put(CampDetailGetX());
     final electricController = Get.put(ElectricInfoGetX());
 
     return Scaffold(
@@ -44,6 +42,8 @@ class HomePageScreen extends StatelessWidget {
                         if (notification is ScrollUpdateNotification) {
                           homePageController.page.value =
                               homePageController.pageController.page.toInt();
+                          homePageController.selectedCampId.value = campList.value[homePageController.page.value]['id'].toString();
+                          electricController.apiElectricCategoryList();
                         }
                         return;
                       },

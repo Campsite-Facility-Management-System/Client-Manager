@@ -117,7 +117,7 @@ class AddDeviceScreen extends StatelessWidget {
                                 itemCount:
                                     setDeviceController.categoryList.length,
                                 itemBuilder: (context, index) {
-                                  return InkWell(
+                                  return Obx(() => InkWell(
                                     onTap: () {
                                       setDeviceController
                                           .selected_Category_Index
@@ -141,7 +141,7 @@ class AddDeviceScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                  );
+                                  ),);
                                 },
                               );
                             }
@@ -160,7 +160,8 @@ class AddDeviceScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: RaisedButton(
-                          onPressed: () => setDeviceController.upload(
+                          onPressed: () {
+                            setDeviceController.upload(
                             _name.text,
                             setDeviceController
                                 .categoryList
@@ -168,7 +169,8 @@ class AddDeviceScreen extends StatelessWidget {
                                     .selected_Category_Index.value]
                                 .id,
                             homepageController.selectedCampId,
-                          ),
+                          );
+                          },
                           child: Text('등록하기'),
                         ),
                       ),

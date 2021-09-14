@@ -34,7 +34,6 @@ class CampDetailGetX extends GetxController {
 
   setSelectedCampId(campId) {
     this.selectedCampId = campId;
-    print('campId: ' + selectedCampId.toString());
   }
 
   setCMap(index, name) {
@@ -72,7 +71,5 @@ class CampDetailGetX extends GetxController {
     for (var i = 0; i < detailData.length; i++) {
       setCMap(detailData[i]['id'], detailData[i]['name']);
     }
-
-    print(detailData);
   }
 }

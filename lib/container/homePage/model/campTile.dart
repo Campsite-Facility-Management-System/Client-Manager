@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/getX/campManagement/campDetailGetX.dart';
+import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:client_manager/screen/campManagement/campDetailScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CampTile {
   static final controller = Get.put(CampDetailGetX());
+  static final homeController = Get.put(homePageGetX());
 
   static Widget buildTile(context, item) => Container(
         child: Container(
@@ -64,9 +66,12 @@ class CampTile {
                 title: RaisedButton(
                   color: Colors.green,
                   onPressed: () => {
-                    controller.setSelectedCampId(item['id']),
-                    controller.apiCampDetail(),
-                    Get.to(CampDetailScreen()),
+                    homeController.selectedCampId(item['id']),
+                    print('selectedCampId : ' + homeController.selectedCampId.value.toString()),
+                    homeController.apiCampList(),
+                    // controller.setSelectedCampId(item['id']),
+                    // controller.apiCampDetail(),
+                    // Get.to(CampDetailScreen()),
                   },
                   child: Text(
                     '관리',
