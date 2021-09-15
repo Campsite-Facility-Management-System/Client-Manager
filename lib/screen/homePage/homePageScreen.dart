@@ -3,6 +3,8 @@ import 'package:client_manager/function/env.dart';
 import 'package:client_manager/getX/electric/electricListGetX.dart';
 import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:client_manager/getX/item/ItemController.dart';
+import 'package:client_manager/getX/item/orderController.dart';
+import 'package:client_manager/getX/reservation/rsvController.dart';
 import 'package:client_manager/screen/campManagement/addCampScreen.dart';
 import 'package:client_manager/screen/campManagement/addCategoryScreen.dart';
 import 'package:client_manager/screen/campManagement/addDeviceScreen.dart';
@@ -16,6 +18,8 @@ import 'package:get/get.dart';
 class HomePageScreen extends StatelessWidget {
   final token = new FlutterSecureStorage();
   final itemController = Get.put(ItemController());
+  final orderController = Get.put(OrderController());
+  final rsvController = Get.put(RsvController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +52,21 @@ class HomePageScreen extends StatelessWidget {
                             homePageController.selectedCampId.value = campList
                                 .value[homePageController.page.value]['id']
                                 .toString();
-                            electricController.apiElectricCategoryList();
+                            switch (homePageController.tab.value) {
+                              case 0: 
+                                electricController.apiElectricCategoryList();
+                                break;
+                              case 1: 
+                                itemController.apiGoodsList(homePageController.selectedCampId.value);
+                                break;
+                              case 2: 
+                                rsvController.apiRsvList(homePageController.selectedCampId.value);
+                                break;
+                              case 3: 
+                                orderController.apiOrderList(homePageController.selectedCampId.value);
+                                break;
+                            }
+                            
                           }
                           return;
                         },
@@ -69,8 +87,11 @@ class HomePageScreen extends StatelessWidget {
                                     homePageController.selectedCampId);
                                 break;
                               case 2:
+                                await orderController.apiOrderList(
+                                    homePageController.selectedCampId);
                                 break;
                               case 3:
+                                await rsvController.apiRsvList(homePageController.selectedCampId);
                                 break;
                             }
                           },
@@ -81,19 +102,19 @@ class HomePageScreen extends StatelessWidget {
                             return Stack(
                               children: [
                                 campImg(Env.url + campList[index]['img_url']),
-                                Positioned(
-                                  top: 0,
-                                  right: 15,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      //캠핑장 정보 수정
-                                    },
-                                    icon: Icon(
-                                      Icons.settings,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                ),
+                                // Positioned(
+                                //   top: 0,
+                                //   right: 15,
+                                //   child: IconButton(
+                                //     onPressed: () {
+                                //       //캠핑장 정보 수정
+                                //     },
+                                //     icon: Icon(
+                                //       Icons.settings,
+                                //       color: Colors.green,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             );
                           },
@@ -101,6 +122,7 @@ class HomePageScreen extends StatelessWidget {
                       ),
                     ),
                     Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           campList[homePageController.currentPage.toInt()]
@@ -189,8 +211,9 @@ class HomePageScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     homePageController.tab.value = 2;
+                                    await rsvController.apiRsvList(homePageController.selectedCampId);
                                   },
                                   child: Container(
                                     color: homePageController.tab.value == 2
@@ -216,8 +239,10 @@ class HomePageScreen extends StatelessWidget {
                               ),
                               Expanded(
                                 child: InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     homePageController.tab.value = 3;
+                                    await orderController.apiOrderList(
+                                        homePageController.selectedCampId);
                                   },
                                   child: Container(
                                     color: homePageController.tab.value == 3
@@ -225,7 +250,7 @@ class HomePageScreen extends StatelessWidget {
                                         : Colors.white,
                                     child: Center(
                                       child: Text(
-                                        '물품내역',
+                                        '물품주문내역',
                                         style: TextStyle(
                                           fontSize:
                                               homePageController.tab.value == 3
@@ -612,62 +637,114 @@ class HomePageScreen extends StatelessWidget {
   Widget reservationList() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
-      child: ListView.separated(
+      child: GetBuilder<RsvController>(builder: (_){
+        return ListView.separated(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        itemCount: 5,
+        itemCount: rsvController.rsvList.value == null? 0:
+        rsvController.rsvList.value.length,
         itemBuilder: (context, index) {
           return Container(
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('예약자: 모닥'),
-                Text('예약기간: 9/23~9/24'),
-                Text('카테고리: 글램핑'),
-                Text('디바이스: abbc12'),
-                Text('상태: 체크인'),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('예약자: ' + rsvController.rsvList.value[index].userName.toString()),
+                    Text('예약기간: ' + rsvController.rsvList.value[index].startDate.toString() + ' ~ ' + rsvController.rsvList.value[index].endDate.toString()),
+                    Text('카테고리: ' + rsvController.rsvList.value[index].siteTypeName.toString()),
+                    Text('디바이스: '+ rsvController.rsvList.value[index].deviceName.toString()),
+                    Text('상태: ' + rsvController.rsvList.value[index].status.toString()),
+                  ],
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width/4,
+                  child: CachedNetworkImage(
+                    imageUrl: Env.url + rsvController.rsvList.value[index].imgUrl.toString())),
               ],
             ),
+
           );
         },
         separatorBuilder: (context, index) {
           return Divider();
         },
-      ),
+      );
+      })
     );
   }
 
   Widget itemList() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: ListView.separated(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('구매자: 모닥'),
-                Text('구매물품: 장작'),
-                Text('수량: 2'),
-                Text('상태: 수령'),
-              ],
-            ),
-          );
-        },
-        separatorBuilder: (context, index) {
-          return Divider();
-        },
-      ),
-    );
+    return GetBuilder<OrderController>(builder: (_) {
+      return Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        child: ListView.separated(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: orderController.orderList.length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('구매자: ' +
+                            orderController
+                                .orderList.value[index].userNickname),
+                        Text('구매물품: ' +
+                            orderController.orderList.value[index].goodsName),
+                        Text('수량: ' +
+                            orderController.orderList.value[index].count
+                                .toString()),
+                        Text('주문일자: ' +
+                            orderController.orderList.value[index].updatedAt
+                                .toString()
+                                .split('T')[0]),
+                        Text('가격: ' +
+                            orderController.orderList.value[index].totalPrice
+                                .toString() +
+                            '원'),
+                        Text('배송지: ' +
+                            orderController.orderList.value[index].deviceName
+                                .toString()),
+                        Text(
+                          '상태 : ' +
+                              (orderController.orderList.value[index].status
+                                          .toString() ==
+                                      'reserve'
+                                  ? '주문완료'
+                                  : '취소'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: CachedNetworkImage(
+                        imageUrl: Env.url +
+                            orderController.orderList.value[index].imgUrl
+                                .toString()),
+                  ),
+                ],
+              ),
+            );
+          },
+          separatorBuilder: (context, index) {
+            return Divider();
+          },
+        ),
+      );
+    });
   }
 
   Widget campImg(String image) {

@@ -2,6 +2,8 @@ import 'package:client_manager/container/homePage/model/myInfo.dart';
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/getX/electric/electricListGetX.dart';
 import 'package:client_manager/getX/item/ItemController.dart';
+import 'package:client_manager/getX/item/orderController.dart';
+import 'package:client_manager/getX/reservation/rsvController.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -21,6 +23,8 @@ class homePageGetX extends GetxController {
 
   ScrollController scrollController = ScrollController();
   final itemController = Get.put(ItemController());
+  final orderController = Get.put(OrderController());
+  final rsvController = Get.put(RsvController());
 
   void event() {
     scrollController.addListener(() {
@@ -31,8 +35,10 @@ class homePageGetX extends GetxController {
             itemController.apiGoodsListNext();
             break;
           case 2:
+            rsvController.apiRsvListNext();
             break;
           case 3:
+            orderController.apiOrderListNext();
             break;
         }
       }

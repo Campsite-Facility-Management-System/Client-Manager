@@ -109,52 +109,7 @@ class _MainFunctionState extends State<MainFunction> {
               ),
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.grey),
-              ),
-            ),
-            child: ListTile(
-              onTap: () {
-                Get.back();
-              },
-              leading: Icon(
-                Icons.notification_important,
-                color: Colors.green,
-              ),
-              title: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  '알림내역',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.grey),
-              ),
-            ),
-            child: ListTile(
-              onTap: () {
-                Get.back();
-              },
-              leading: Icon(
-                Icons.store,
-                color: Colors.green,
-              ),
-              title: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  '물품 관리',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-          ),
+          
           Container(
             decoration: BoxDecoration(
               border: Border(

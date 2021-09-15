@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/getX/item/model/json_goods_list/json_goods_list.dart';
+import 'package:client_manager/getX/item/model/json_order_list/json_order_list.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class ItemController extends GetxController {
-  var itemList = [].obs;
+class OrderController extends GetxController {
+  var orderList = [].obs;
   final token = new FlutterSecureStorage();
   var jsonData;
 
-  apiGoodsList(campId) async {
-    var url = Env.url + '/api/goods/manager/list?camp_id=' + campId.toString();
+  apiOrderList(campId) async {
+    var url = Env.url + '/api/order/manager/list?camp_id=' + campId.toString();
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
 
@@ -23,19 +24,21 @@ class ItemController extends GetxController {
 
     if (response.statusCode == 200) {
       var data = await response.stream.bytesToString();
-      jsonData = JsonGoodsList.fromJson(await jsonDecode(data));
+      jsonData = JsonOrderList.fromJson(await jsonDecode(data));
 
-      itemList.clear();
+      print(data);
+      orderList.clear();
       for (var i = 0; i < jsonData.data.length; i++) {
-        itemList.value.add(jsonData.data[i]);
+        orderList.value.add(jsonData.data[i]);
       }
+      print(orderList.length);
       update();
     } else {
       print(response.reasonPhrase);
     }
   }
 
-  apiGoodsListNext() async {
+  apiOrderListNext() async {
     var url = jsonData.links.next;
 
     print(url);
@@ -51,13 +54,13 @@ class ItemController extends GetxController {
 
       if (response.statusCode == 200) {
         var data = await response.stream.bytesToString();
-        jsonData = JsonGoodsList.fromJson(await jsonDecode(data));
+        jsonData = JsonOrderList.fromJson(await jsonDecode(data));
 
         for (var i = 0; i < jsonData.data.length; i++) {
-          itemList.value.add(jsonData.data[i]);
+          orderList.value.add(jsonData.data[i]);
         }
         update();
-        print(itemList.length);
+        print(orderList.length);
       } else {
         print(response.reasonPhrase);
       }

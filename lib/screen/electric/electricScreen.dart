@@ -247,7 +247,9 @@ class ElectricInfoScreen extends StatelessWidget {
                                 minX: 0,
                                 maxX: 13,
                                 minY: -2,
-                                maxY: graph_Controller.max.value * 1.2,
+                                maxY: graph_Controller.max.value < 100
+                                    ? 100
+                                    : graph_Controller.max.value * 1.2,
                                 lineBarsData: [
                                   LineChartBarData(
                                     spots: graph_Controller.spotList,

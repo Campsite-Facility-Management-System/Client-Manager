@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'package:client_manager/function/env.dart';
-import 'package:client_manager/getX/item/model/json_goods_list/json_goods_list.dart';
+import 'package:client_manager/getX/item/model/json_order_list/json_order_list.dart';
+import 'package:client_manager/getX/reservation/model/json_rsv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class ItemController extends GetxController {
-  var itemList = [].obs;
+class RsvController extends GetxController {
+  var rsvList = [].obs;
   final token = new FlutterSecureStorage();
   var jsonData;
 
-  apiGoodsList(campId) async {
-    var url = Env.url + '/api/goods/manager/list?camp_id=' + campId.toString();
+  apiRsvList(campId) async {
+    var url =
+        Env.url + '/api/reservation/manager/list?camp_id=' + campId.toString();
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
 
@@ -23,19 +25,22 @@ class ItemController extends GetxController {
 
     if (response.statusCode == 200) {
       var data = await response.stream.bytesToString();
-      jsonData = JsonGoodsList.fromJson(await jsonDecode(data));
+      jsonData = JsonRsv.fromJson(await jsonDecode(data));
 
-      itemList.clear();
+      print(data);
+      rsvList.clear();
       for (var i = 0; i < jsonData.data.length; i++) {
-        itemList.value.add(jsonData.data[i]);
+        rsvList.value.add(jsonData.data[i]);
       }
+      print(rsvList.length);
       update();
     } else {
+      update();
       print(response.reasonPhrase);
     }
   }
 
-  apiGoodsListNext() async {
+  apiRsvListNext() async {
     var url = jsonData.links.next;
 
     print(url);
@@ -51,13 +56,13 @@ class ItemController extends GetxController {
 
       if (response.statusCode == 200) {
         var data = await response.stream.bytesToString();
-        jsonData = JsonGoodsList.fromJson(await jsonDecode(data));
+        jsonData = JsonRsv.fromJson(await jsonDecode(data));
 
         for (var i = 0; i < jsonData.data.length; i++) {
-          itemList.value.add(jsonData.data[i]);
+          rsvList.value.add(jsonData.data[i]);
         }
         update();
-        print(itemList.length);
+        print(rsvList.length);
       } else {
         print(response.reasonPhrase);
       }
