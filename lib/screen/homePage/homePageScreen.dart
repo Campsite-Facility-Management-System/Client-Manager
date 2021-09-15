@@ -720,10 +720,7 @@ class HomePageScreen extends StatelessWidget {
                         Text(
                           '상태 : ' +
                               (orderController.orderList.value[index].status
-                                          .toString() ==
-                                      'reserve'
-                                  ? '주문완료'
-                                  : '취소'),
+                                          .toString()),
                         ),
                       ],
                     ),
