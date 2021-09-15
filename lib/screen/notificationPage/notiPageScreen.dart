@@ -1,10 +1,16 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:client_manager/getX/Notification/Noti_Controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NotiPageScreen extends StatelessWidget {
+  final noti_Controller = Get.put(Noti_Controller());
+
   @override
   Widget build(BuildContext context) {
+    noti_Controller.api_noti_list();
+
+    var current_time = DateTime.now();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -14,87 +20,113 @@ class NotiPageScreen extends StatelessWidget {
             Get.back();
           },
           icon: Icon(
-            Icons.arrow_back,
+            Icons.arrow_back_ios,
             color: Colors.grey,
-            size: 20,
           ),
         ),
-        actions: [
-          Container(
-            margin: EdgeInsets.only(right: 10),
-            child: IconButton(
-              onPressed: null,
-              icon: Icon(Icons.refresh),
-            ),
+        centerTitle: true,
+        title: Text(
+          '알림',
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+        ),
+        
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(left: 20, bottom: 10),
-                child: Text(
-                  '알림',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                ),
-              ),
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 10,
-                itemBuilder: (context, index) => Container(
-                  height: 90,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  margin:
-                      EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 50,
-                        margin: EdgeInsets.only(left: 10, right: 20),
-                        child: ClipOval(
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                'https://img.freepik.com/free-vector/hand-drawn-summer-camp-background-with-tent-bonfire_23-2147806311.jpg?size=338&ext=jpg',
-                          ),
+      body: Obx(
+        () => Container(
+          child: SingleChildScrollView(
+            controller: noti_Controller.scrollController,
+            child: Column(
+              children: [
+                ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: noti_Controller.noti_list.length,
+                  itemBuilder: (context, index) => Container(
+                    height: MediaQuery.of(context).size.height / 9,
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 1,
+                          color: const Color(0xffEBEEF5),
                         ),
                       ),
-                      Expanded(
-                        child: Container(
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                child: Text(
+                                  noti_Controller.noti_list[index]['title'],
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: const Color(0xffFEBA47),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                  noti_Controller.noti_list[index]['body'],
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(left: 10),
                           child: Text(
-                            'Tester 님이 산기대 캠핑장 A-17을 07.19~07.23까지 예약하였습니다',
-                            style: TextStyle(fontSize: 14),
+                            ((() {
+                              String result;
+                              var time = DateTime.now().difference(
+                                  DateTime.parse(noti_Controller
+                                      .noti_list[index]['updated_at']));
+                              if (time.inSeconds == 0) {
+                                result = '방금전';
+                              } else if (time.inSeconds < 60) {
+                                result = time.inSeconds.toString() + '초 전';
+                              } else if (time.inMinutes < 60) {
+                                result = time.inMinutes.toString() + '분 전';
+                              } else if (time.inHours < 24) {
+                                result = time.inHours.toString() + '시간 전';
+                              } else if (time.inDays < 30) {
+                                result = time.inDays.toString() + '일 전';
+                              } else if (time.inDays > 30 &&
+                                  time.inDays < 365) {
+                                result = (time.inDays / 30).toString() + '달 전';
+                              } else if (time.inDays > 365) {
+                                result = (time.inDays / 365).toString() + '년 전';
+                              } else {
+                                result = time.inDays.toString() + '일 전';
+                              }
+
+                              return result;
+                            }())),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: const Color(0xffBABEC8),
+                            ),
                           ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(right: 10),
-                        child: Text(
-                          '1일 전',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
