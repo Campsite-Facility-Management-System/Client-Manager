@@ -1,5 +1,6 @@
 import 'package:client_manager/screen/campManagement/addCampScreen.dart';
 import 'package:client_manager/screen/campManagement/addCategoryScreen.dart';
+import 'package:client_manager/screen/itemManagement/addBuyScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -20,6 +21,7 @@ class AddPictureState extends State<AddPicture> {
   File _image;
   final addCamp = new AddCampScreenState();
   final addCategory = new AddCategoryScreenState();
+  final addItem = new AddBuyScreenState();
 
   getImage() async {
     final pickedImage =
@@ -38,6 +40,8 @@ class AddPictureState extends State<AddPicture> {
       addCamp.getimage(_image.path, widget.index);
     } else if (widget.type == 2) {
       addCategory.getimage(_image.path, widget.index);
+    } else if (widget.type == 3) {
+      addItem.getimage(_image.path, widget.index);
     }
 
     // print("imagePath: " + _image.path);

@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:client_manager/function/env.dart';
-import 'package:client_manager/getX/campManagement/campDetailGetX.dart';
-import 'package:client_manager/getX/electric/electricGraphGetX.dart';
 import 'package:client_manager/getX/electric/electricListGetX.dart';
 import 'package:client_manager/getX/homePage/homePageGetX.dart';
+import 'package:client_manager/getX/item/ItemController.dart';
 import 'package:client_manager/screen/campManagement/addCampScreen.dart';
 import 'package:client_manager/screen/campManagement/addCategoryScreen.dart';
 import 'package:client_manager/screen/campManagement/addDeviceScreen.dart';
@@ -16,6 +15,7 @@ import 'package:get/get.dart';
 
 class HomePageScreen extends StatelessWidget {
   final token = new FlutterSecureStorage();
+  final itemController = Get.put(ItemController());
 
   @override
   Widget build(BuildContext context) {
@@ -29,231 +29,242 @@ class HomePageScreen extends StatelessWidget {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : ListView(
-                shrinkWrap: true,
-                children: <Widget>[
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    height: 200,
-                    child: NotificationListener<ScrollNotification>(
-                      onNotification: (ScrollNotification notification) {
-                        if (notification is ScrollUpdateNotification) {
-                          homePageController.page.value =
-                              homePageController.pageController.page.toInt();
-                          homePageController.selectedCampId.value = campList.value[homePageController.page.value]['id'].toString();
-                          electricController.apiElectricCategoryList();
-                        }
-                        return;
-                      },
-                      child: PageView.builder(
-                        onPageChanged: (pos) async {
-                          homePageController.currentPage.value = pos;
-                          // electricController.selectedCampId.value =
-                          //     campList[homePageController.currentPage.toInt()]
-                          //             ['id']
-                          //         .toString();
-                          switch (homePageController.tab.value) {
-                            case 0:
-                              await electricController
-                                  .apiElectricCategoryList();
-                              break;
-                            case 1:
-                              break;
-                            case 2:
-                              break;
-                            case 3:
-                              break;
+            : SingleChildScrollView(
+                controller: homePageController.scrollController,
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: 200,
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: (ScrollNotification notification) {
+                          if (notification is ScrollUpdateNotification) {
+                            homePageController.page.value =
+                                homePageController.pageController.page.toInt();
+                            homePageController.selectedCampId.value = campList
+                                .value[homePageController.page.value]['id']
+                                .toString();
+                            electricController.apiElectricCategoryList();
                           }
+                          return;
                         },
-                        physics: BouncingScrollPhysics(),
-                        controller: homePageController.pageController,
-                        itemCount: campList.length,
-                        itemBuilder: (context, index) {
-                          return Stack(
+                        child: PageView.builder(
+                          onPageChanged: (pos) async {
+                            homePageController.currentPage.value = pos;
+                            // electricController.selectedCampId.value =
+                            //     campList[homePageController.currentPage.toInt()]
+                            //             ['id']
+                            //         .toString();
+                            switch (homePageController.tab.value) {
+                              case 0:
+                                await electricController
+                                    .apiElectricCategoryList();
+                                break;
+                              case 1:
+                                await itemController.apiGoodsList(
+                                    homePageController.selectedCampId);
+                                break;
+                              case 2:
+                                break;
+                              case 3:
+                                break;
+                            }
+                          },
+                          physics: BouncingScrollPhysics(),
+                          controller: homePageController.pageController,
+                          itemCount: campList.length,
+                          itemBuilder: (context, index) {
+                            return Stack(
+                              children: [
+                                campImg(Env.url + campList[index]['img_url']),
+                                Positioned(
+                                  top: 0,
+                                  right: 15,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      //캠핑장 정보 수정
+                                    },
+                                    icon: Icon(
+                                      Icons.settings,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          campList[homePageController.currentPage.toInt()]
+                              ['name'],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          campList[homePageController.currentPage.toInt()]
+                              ['address'],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          height: 30,
+                          child: Row(
                             children: [
-                              campImg(Env.url + campList[index]['img_url']),
-                              Positioned(
-                                top: 0,
-                                right: 15,
-                                child: IconButton(
-                                  onPressed: () {
-                                    //캠핑장 정보 수정
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    homePageController.tab.value = 0;
+                                    await electricController
+                                        .apiElectricCategoryList();
                                   },
-                                  icon: Icon(
-                                    Icons.settings,
-                                    color: Colors.green,
+                                  child: Container(
+                                    color: homePageController.tab.value == 0
+                                        ? Colors.lightGreen
+                                        : Colors.white,
+                                    child: Center(
+                                      child: Text(
+                                        '전력관리',
+                                        style: TextStyle(
+                                          fontSize:
+                                              homePageController.tab.value == 0
+                                                  ? 16
+                                                  : 14,
+                                          fontWeight:
+                                              homePageController.tab.value == 0
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    homePageController.tab.value = 1;
+                                    await itemController.apiGoodsList(
+                                        homePageController.selectedCampId);
+                                  },
+                                  child: Container(
+                                    color: homePageController.tab.value == 1
+                                        ? Colors.lightGreen
+                                        : Colors.white,
+                                    child: Center(
+                                      child: Text(
+                                        '물품관리',
+                                        style: TextStyle(
+                                          fontSize:
+                                              homePageController.tab.value == 1
+                                                  ? 16
+                                                  : 14,
+                                          fontWeight:
+                                              homePageController.tab.value == 1
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ],
-                          );
-                        },
-                      ),
+                          ),
+                        ),
+                        Container(
+                          height: 30,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    homePageController.tab.value = 2;
+                                  },
+                                  child: Container(
+                                    color: homePageController.tab.value == 2
+                                        ? Colors.lightGreen
+                                        : Colors.white,
+                                    child: Center(
+                                      child: Text(
+                                        '예약내역',
+                                        style: TextStyle(
+                                          fontSize:
+                                              homePageController.tab.value == 2
+                                                  ? 16
+                                                  : 14,
+                                          fontWeight:
+                                              homePageController.tab.value == 2
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    homePageController.tab.value = 3;
+                                  },
+                                  child: Container(
+                                    color: homePageController.tab.value == 3
+                                        ? Colors.lightGreen
+                                        : Colors.white,
+                                    child: Center(
+                                      child: Text(
+                                        '물품내역',
+                                        style: TextStyle(
+                                          fontSize:
+                                              homePageController.tab.value == 3
+                                                  ? 16
+                                                  : 14,
+                                          fontWeight:
+                                              homePageController.tab.value == 3
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        (() {
+                          switch (homePageController.tab.value) {
+                            case 0:
+                              return electric();
+                              break;
+                            case 1:
+                              return item(context);
+                              break;
+                            case 2:
+                              return reservationList();
+                              break;
+                            case 3:
+                              return itemList();
+                              break;
+                            default:
+                          }
+                        }()),
+                      ],
                     ),
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        campList[homePageController.currentPage.toInt()]
-                            ['name'],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        campList[homePageController.currentPage.toInt()]
-                            ['address'],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        height: 30,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  homePageController.tab.value = 0;
-                                },
-                                child: Container(
-                                  color: homePageController.tab.value == 0
-                                      ? Colors.lightGreen
-                                      : Colors.white,
-                                  child: Center(
-                                    child: Text(
-                                      '전력관리',
-                                      style: TextStyle(
-                                        fontSize:
-                                            homePageController.tab.value == 0
-                                                ? 16
-                                                : 14,
-                                        fontWeight:
-                                            homePageController.tab.value == 0
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  homePageController.tab.value = 1;
-                                  electricController.apiElectricCategoryList();
-                                },
-                                child: Container(
-                                  color: homePageController.tab.value == 1
-                                      ? Colors.lightGreen
-                                      : Colors.white,
-                                  child: Center(
-                                    child: Text(
-                                      '물품관리',
-                                      style: TextStyle(
-                                        fontSize:
-                                            homePageController.tab.value == 1
-                                                ? 16
-                                                : 14,
-                                        fontWeight:
-                                            homePageController.tab.value == 1
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  homePageController.tab.value = 2;
-                                },
-                                child: Container(
-                                  color: homePageController.tab.value == 2
-                                      ? Colors.lightGreen
-                                      : Colors.white,
-                                  child: Center(
-                                    child: Text(
-                                      '예약내역',
-                                      style: TextStyle(
-                                        fontSize:
-                                            homePageController.tab.value == 2
-                                                ? 16
-                                                : 14,
-                                        fontWeight:
-                                            homePageController.tab.value == 2
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  homePageController.tab.value = 3;
-                                },
-                                child: Container(
-                                  color: homePageController.tab.value == 3
-                                      ? Colors.lightGreen
-                                      : Colors.white,
-                                  child: Center(
-                                    child: Text(
-                                      '물품내역',
-                                      style: TextStyle(
-                                        fontSize:
-                                            homePageController.tab.value == 3
-                                                ? 16
-                                                : 14,
-                                        fontWeight:
-                                            homePageController.tab.value == 3
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      (() {
-                        switch (homePageController.tab.value) {
-                          case 0:
-                            return electric();
-                            break;
-                          case 1:
-                            return item(context);
-                            break;
-                          case 2:
-                            return reservationList();
-                            break;
-                          case 3:
-                            return itemList();
-                            break;
-                          default:
-                        }
-                      }()),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -294,49 +305,76 @@ class HomePageScreen extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        Container(
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 20,
-              childAspectRatio: 3 / 4,
-            ),
-            itemCount: 4,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CachedNetworkImage(
-                        imageUrl:
-                            'http://img.danawa.com/prod_img/500000/232/101/img/2101232_1.jpg?shrink=360:360&_v=20200221134654'),
-                    SizedBox(
-                      height: 5,
+        GetBuilder<ItemController>(builder: (_) {
+          return itemController.itemList.value == null
+              ? Center(child: CircularProgressIndicator())
+              : Container(
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 0,
+                      childAspectRatio: 3 / 4,
                     ),
-                    Text(
-                      '장작',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      '2000원',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+                    itemCount: itemController.itemList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 0.1),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width / 2,
+                              height: MediaQuery.of(context).size.width / 2,
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: itemController
+                                            .itemList.value[index].imgUrl ==
+                                        null
+                                    ? Center(child: CircularProgressIndicator())
+                                    : CachedNetworkImage(
+                                        imageUrl: Env.url +
+                                            itemController
+                                                .itemList.value[index].imgUrl
+                                                .toString()),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              itemController.itemList.value[index].name == null
+                                  ? ''
+                                  : itemController.itemList.value[index].name
+                                      .toString(),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              itemController.itemList.value[index].price == null
+                                  ? ''
+                                  : itemController.itemList.value[index].price
+                                          .toString() +
+                                      '원',
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+        }),
         SizedBox(
           height: 20,
         ),
@@ -481,8 +519,7 @@ class HomePageScreen extends StatelessWidget {
                       // graph_Controller.campId =
                       //     homePageController.selectedCampId.value;
                       Get.to(() => ElectricInfoScreen(electricController
-                          .detailData
-                          .value[index]['deviceList'][deviceIndex]));
+                          .detailData.value[index]['deviceList'][deviceIndex]));
                     },
                     child: Container(
                       margin: EdgeInsets.only(
@@ -539,7 +576,8 @@ class HomePageScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Obx(()=>CupertinoSwitch(
+                            Obx(
+                              () => CupertinoSwitch(
                                 value: electricController.detailData
                                                 .value[index]['deviceList']
                                             [deviceIndex]['state'] ==
@@ -551,7 +589,9 @@ class HomePageScreen extends StatelessWidget {
                                       value,
                                       electricController.detailData.value[index]
                                           ['deviceList'][deviceIndex]['id']);
-                                },),),
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       ),

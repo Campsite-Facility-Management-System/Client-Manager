@@ -1,5 +1,6 @@
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/function/addPicture.dart';
+import 'package:client_manager/getX/homePage/homePageGetX.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -17,15 +18,25 @@ class AddBuyScreenState extends State<AddBuyScreen> {
   TextEditingController _price = new TextEditingController();
   TextEditingController _info = new TextEditingController();
   final token = new FlutterSecureStorage();
+  final homeController = Get.put(homePageGetX());
+
+  getimage(imagePath, index) {
+    imageList[index] = imagePath;
+
+    for (int i = 0; i < 6; i++) {
+      print("index: " + i.toString() + " : " + imageList[i].toString());
+    }
+  }
 
   upload() async {
-    var url = Env.url + '/api/campsite/manager/add';
+    var url = Env.url + '/api/goods/manager/create';
     String value = await token.read(key: 'token');
     String myToken = ("Bearer " + value);
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.headers.addAll({'Authorization': myToken});
     request.fields.addAll({
+      'camp_id': homeController.selectedCampId.value.toString(),
       'name': _name.text,
       'price': _price.text,
       'description': _info.text,
@@ -38,17 +49,15 @@ class AddBuyScreenState extends State<AddBuyScreen> {
       }
     }
     var response = await request.send();
-    // print(request.headers);
-    // print(request.fields);
-    // print(request.files);
 
-    print(response.statusCode);
-    print(await response.stream.bytesToString());
+    var data = await response.stream.bytesToString();
+    print(data);
+    print(imageList);
+
     if (response.statusCode == 200) {
-      // print("success");
-      Navigator.pushNamed(context, '/homePage');
+      Get.back();
     } else if (response.statusCode == 401) {
-      // print("error");
+      print("error");
     }
   }
 
@@ -93,7 +102,7 @@ class AddBuyScreenState extends State<AddBuyScreen> {
                           flex: 1,
                           child: Container(
                             margin: EdgeInsets.only(left: 20, right: 10),
-                            child: AddPicture(200, 200, '대표 사진', 0, 2),
+                            child: AddPicture(200, 200, '대표 사진', 0, 3),
                           )),
                       Expanded(
                         flex: 1,
@@ -104,10 +113,10 @@ class AddBuyScreenState extends State<AddBuyScreen> {
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 20,
                             children: [
-                              AddPicture(200, 160, '', 1, 2),
-                              AddPicture(200, 160, '', 2, 2),
-                              AddPicture(200, 160, '', 3, 2),
-                              AddPicture(200, 160, '', 4, 2),
+                              AddPicture(200, 160, '', 1, 3),
+                              AddPicture(200, 160, '', 2, 3),
+                              AddPicture(200, 160, '', 3, 3),
+                              AddPicture(200, 160, '', 4, 3),
                             ],
                           ),
                         ),

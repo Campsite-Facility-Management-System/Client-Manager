@@ -140,24 +140,21 @@ class SetDeviceGetX extends GetxController {
               Get.back();
             }
             isSending.value = false;
-
           }
         }).onDone(() {
           print('onDone');
           count = 0;
-          connection.finish();              
+          connection.finish();
           isSending.value = false;
         });
       } catch (exception) {
         print("수신 오류");
         print(exception);
         isSending.value = false;
-
       }
     } catch (exception) {
       print('커넥트 결과: Cannot connect, exception occured');
       isSending.value = false;
-
     }
   }
 

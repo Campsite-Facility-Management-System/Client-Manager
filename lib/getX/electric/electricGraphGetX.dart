@@ -26,7 +26,6 @@ class ElectricGraphGetX extends GetxController {
   var deviceId = ''.obs;
   var do_loop = false.obs;
 
-
   @override
   onClose() {
     super.onClose();
@@ -37,9 +36,11 @@ class ElectricGraphGetX extends GetxController {
     do_loop.value = true;
     await Future.doWhile(() async {
       await Future.delayed(Duration(seconds: 5));
-      apiUsageData();
-      apiGraph();
+
       if (do_loop.value) {
+        apiUsageData();
+        apiGraph();
+        update();
         return true;
       } else {
         return false;
@@ -63,7 +64,9 @@ class ElectricGraphGetX extends GetxController {
       'device_id': deviceId.toString(),
     });
 
-    usageData = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+    var data = utf8.decode(response.bodyBytes);
+    print(data);
+    usageData = jsonDecode(data) as Map;
     usage.value = usageData["usage"].toString();
     charge.value = usageData["charge"].toString();
   }
@@ -86,18 +89,15 @@ class ElectricGraphGetX extends GetxController {
       var data = await response.stream.bytesToString();
       var state = jsonDecode(data);
 
-      if(state['state'] == '0'){
-      isSwitched.value = false;
-       } else {
-      isSwitched.value = true;
+      if (state['state'] == '0') {
+        isSwitched.value = false;
+      } else {
+        isSwitched.value = true;
       }
-
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
-
 
   apichangeStatus(change) async {
     var url = Env.url + '/api/device/manager/controll';
@@ -123,7 +123,6 @@ class ElectricGraphGetX extends GetxController {
 
   apiGraph() async {
     // tokenFunction.tokenCheck();
-    spotList.clear();
 
     print('deviceId: ' + deviceId.toString());
 
@@ -139,15 +138,15 @@ class ElectricGraphGetX extends GetxController {
     var data = utf8.decode(response.bodyBytes);
     print("data: " + data.toString());
     graphData = jsonDecode(data) as Map;
-    
     spotList = makeSpot();
     // print(spot.toString());
     // for (int i = 0; i < 5; i++) {
     //   leftTitle.add((graphData["max"] / 4 * i).round());
     // }
-
-    max.value = graphData['max'].toInt();
     electricity.value = spotList;
+    max.value = graphData['max'].toInt();
+
+    update();
   }
 
   List<FlSpot> makeSpot() {

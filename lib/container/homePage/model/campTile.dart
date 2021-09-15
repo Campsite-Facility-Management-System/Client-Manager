@@ -67,7 +67,8 @@ class CampTile {
                   color: Colors.green,
                   onPressed: () => {
                     homeController.selectedCampId(item['id']),
-                    print('selectedCampId : ' + homeController.selectedCampId.value.toString()),
+                    print('selectedCampId : ' +
+                        homeController.selectedCampId.value.toString()),
                     homeController.apiCampList(),
                     // controller.setSelectedCampId(item['id']),
                     // controller.apiCampDetail(),

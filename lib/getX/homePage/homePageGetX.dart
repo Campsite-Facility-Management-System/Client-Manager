@@ -1,6 +1,7 @@
 import 'package:client_manager/container/homePage/model/myInfo.dart';
 import 'package:client_manager/function/env.dart';
 import 'package:client_manager/getX/electric/electricListGetX.dart';
+import 'package:client_manager/getX/item/ItemController.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -18,12 +19,34 @@ class homePageGetX extends GetxController {
   var selectedCampId = ''.obs;
   var tab = 0.obs; //예약내역(0), 물품내역(1)
 
+  ScrollController scrollController = ScrollController();
+  final itemController = Get.put(ItemController());
+
+  void event() {
+    scrollController.addListener(() {
+      if ((scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent)) {
+        switch (tab.value) {
+          case 1:
+            itemController.apiGoodsListNext();
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+        }
+      }
+    });
+  }
+
   @override
   onInit() {
     super.onInit();
     apiCampList();
     pageController = PageController(
         initialPage: currentPage.toInt(), viewportFraction: viewPortFraction);
+
+    event();
   }
 
   Future<MyInfo> me() async {

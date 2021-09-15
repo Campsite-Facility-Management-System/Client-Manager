@@ -21,10 +21,10 @@ class ElectricInfoScreen extends StatelessWidget {
     graph_Controller.deviceId.value = this.data['id'].toString();
     graph_Controller.apiUsageData();
     graph_Controller.apiGraph();
-    graph_Controller.do_loop();
+    graph_Controller.loop();
 
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         electricController.apiElectricCategoryList();
         Get.back();
         return;
@@ -50,7 +50,8 @@ class ElectricInfoScreen extends StatelessWidget {
                           width: 150,
                           height: 200,
                           decoration: BoxDecoration(
-                              border: Border.all(width: 0.5, color: Colors.white),
+                              border:
+                                  Border.all(width: 0.5, color: Colors.white),
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.white),
@@ -64,26 +65,29 @@ class ElectricInfoScreen extends StatelessWidget {
                                       ? data['name']
                                       : 'loading',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 30),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 30),
                                   textAlign: TextAlign.left,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        Obx(()=> Container(
-                          child: Transform.scale(
-                            scale: 4.0,
-                            child: Switch(
-                              value: graph_Controller.isSwitched.value,
-                              activeColor: Colors.green,
-                              activeTrackColor: Colors.lightGreen,
-                              onChanged: (value) {
-                                graph_Controller.apichangeStatus(value);
-                              },
+                        Obx(
+                          () => Container(
+                            child: Transform.scale(
+                              scale: 4.0,
+                              child: Switch(
+                                value: graph_Controller.isSwitched.value,
+                                activeColor: Colors.green,
+                                activeTrackColor: Colors.lightGreen,
+                                onChanged: (value) {
+                                  graph_Controller.apichangeStatus(value);
+                                },
+                              ),
                             ),
                           ),
-                        ),),
+                        ),
                       ],
                     ),
                     Row(
@@ -117,13 +121,16 @@ class ElectricInfoScreen extends StatelessWidget {
                               SizedBox(
                                 height: 20,
                               ),
-                              Obx(() => Text(
-                                graph_Controller.usage.value != null
-                                    ? graph_Controller.usage.value.toString() +
-                                        "kW"
-                                    : 'loading...',
-                                style: TextStyle(fontSize: 30),
-                              ),),
+                              Obx(
+                                () => Text(
+                                  graph_Controller.usage.value != null
+                                      ? graph_Controller.usage.value
+                                              .toString() +
+                                          "kW"
+                                      : 'loading...',
+                                  style: TextStyle(fontSize: 30),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -155,12 +162,14 @@ class ElectricInfoScreen extends StatelessWidget {
                               SizedBox(
                                 height: 20,
                               ),
-                              Obx(() => Text(
-                                graph_Controller.charge.value != null
-                                    ? graph_Controller.charge.toString() + "원"
-                                    : 'loading...',
-                                style: TextStyle(fontSize: 30),
-                              ),),
+                              Obx(
+                                () => Text(
+                                  graph_Controller.charge.value != null
+                                      ? graph_Controller.charge.toString() + "원"
+                                      : 'loading...',
+                                  style: TextStyle(fontSize: 30),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -172,86 +181,92 @@ class ElectricInfoScreen extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 30),
-                child: Text('전력 사용량 그래프'),
-              ),
               SizedBox(
                 height: 10,
               ),
-              Obx(() => graph_Controller.spotList == null?Center(child: CircularProgressIndicator()):
-              AspectRatio(
-                aspectRatio: 1.5,
-                child: Container(
-                  margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 15, top: 20),
-                    child: LineChart(
-                      LineChartData(
-                        gridData: FlGridData(
-                          show: false,
-                          drawVerticalLine: true,
-                          getDrawingHorizontalLine: (value) {
-                            return FlLine(
-                              color: Colors.white,
-                              strokeWidth: 1,
+              graph_Controller.spotList == null
+                  ? Center(child: CircularProgressIndicator())
+                  : AspectRatio(
+                      aspectRatio: 1.5,
+                      child: Container(
+                        margin:
+                            EdgeInsets.only(left: 10, right: 40, bottom: 20),
+                        child: GetBuilder<ElectricGraphGetX>(
+                          builder: (_) {
+                            return LineChart(
+                              LineChartData(
+                                gridData: FlGridData(
+                                  show: false,
+                                  drawVerticalLine: true,
+                                  getDrawingHorizontalLine: (value) {
+                                    return FlLine(
+                                      color: Colors.white,
+                                      strokeWidth: 1,
+                                    );
+                                  },
+                                  getDrawingVerticalLine: (value) {
+                                    return FlLine(
+                                      color: Colors.white,
+                                      strokeWidth: 1,
+                                    );
+                                  },
+                                ),
+                                titlesData: FlTitlesData(
+                                  rightTitles: SideTitles(
+                                    showTitles: false,
+                                  ),
+                                  topTitles: SideTitles(
+                                    showTitles: false,
+                                  ),
+                                  leftTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 50,
+                                    margin: 2,
+                                    interval: 1,
+                                    getTitles: (value) {
+                                      if (value.toInt() == 0) {
+                                        return '0w';
+                                      }
+
+                                      if (value.toInt() ==
+                                          graph_Controller.max.value.toInt()) {
+                                        return graph_Controller.max.value
+                                                .toString() +
+                                            'w';
+                                      }
+
+                                      return '';
+                                    },
+                                  ),
+                                ),
+                                borderData: FlBorderData(
+                                  show: true,
+                                  border:
+                                      Border.all(color: Colors.green, width: 1),
+                                ),
+                                minX: 0,
+                                maxX: 13,
+                                minY: -2,
+                                maxY: graph_Controller.max.value * 1.2,
+                                lineBarsData: [
+                                  LineChartBarData(
+                                    spots: graph_Controller.spotList,
+                                    isCurved: false,
+                                    barWidth: 5,
+                                    dotData: FlDotData(
+                                      show: true,
+                                    ),
+                                    belowBarData: BarAreaData(
+                                      show: false,
+                                    ),
+                                  )
+                                ],
+                              ),
                             );
                           },
-                          getDrawingVerticalLine: (value) {
-                            return FlLine(
-                              color: Colors.white,
-                              strokeWidth: 1,
-                            );
-                          },
                         ),
-                        titlesData: FlTitlesData(
-                          leftTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 30,
-                            
-                            margin: 10,
-                            interval: 1,
-                            getTitles: (value) {
-                              if (value.toInt() == 0) {
-                                return '0';
-                              }
-    
-                              if (value.toInt() ==
-                                  graph_Controller.max.value.toInt()) {
-                                return graph_Controller.max.value.toString();
-                              }
-    
-                              return '';
-                            },
-                          ),
-                        ),
-                        borderData: FlBorderData(
-                          show: true,
-                          border: Border.all(color: Colors.green, width: 1),
-                        ),
-                        minX: 0,
-                        maxX: 13,
-                        minY: -2,
-                        maxY: graph_Controller.max.value * 1.2,
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: graph_Controller.spotList,
-                            isCurved: true,
-                            barWidth: 5,
-                            dotData: FlDotData(
-                              show: true,
-                            ),
-                            belowBarData: BarAreaData(
-                              show: false,
-                            ),
-                          )
-                        ],
                       ),
                     ),
-                  ),
-                ),
-              ),),
             ],
           ),
         ),

@@ -117,31 +117,35 @@ class AddDeviceScreen extends StatelessWidget {
                                 itemCount:
                                     setDeviceController.categoryList.length,
                                 itemBuilder: (context, index) {
-                                  return Obx(() => InkWell(
-                                    onTap: () {
-                                      setDeviceController
-                                          .selected_Category_Index
-                                          .value = index;
-                                    },
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          color: setDeviceController
-                                                      .selected_Category_Index
-                                                      .value ==
-                                                  index
-                                              ? Colors.green
-                                              : Colors.white,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          alignment: Alignment.centerLeft,
-                                          height: 50,
-                                          child: Text(setDeviceController
-                                              .categoryList.value[index].name),
-                                        ),
-                                      ],
+                                  return Obx(
+                                    () => InkWell(
+                                      onTap: () {
+                                        setDeviceController
+                                            .selected_Category_Index
+                                            .value = index;
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            color: setDeviceController
+                                                        .selected_Category_Index
+                                                        .value ==
+                                                    index
+                                                ? Colors.green
+                                                : Colors.white,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20),
+                                            alignment: Alignment.centerLeft,
+                                            height: 50,
+                                            child: Text(setDeviceController
+                                                .categoryList
+                                                .value[index]
+                                                .name),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),);
+                                  );
                                 },
                               );
                             }
@@ -162,14 +166,14 @@ class AddDeviceScreen extends StatelessWidget {
                         child: RaisedButton(
                           onPressed: () {
                             setDeviceController.upload(
-                            _name.text,
-                            setDeviceController
-                                .categoryList
-                                .value[setDeviceController
-                                    .selected_Category_Index.value]
-                                .id,
-                            homepageController.selectedCampId,
-                          );
+                              _name.text,
+                              setDeviceController
+                                  .categoryList
+                                  .value[setDeviceController
+                                      .selected_Category_Index.value]
+                                  .id,
+                              homepageController.selectedCampId,
+                            );
                           },
                           child: Text('등록하기'),
                         ),
