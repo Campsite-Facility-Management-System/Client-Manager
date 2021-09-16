@@ -96,6 +96,30 @@ class _MainFunctionState extends State<MainFunction> {
             child: ListTile(
               onTap: () {
                 Get.back();
+                Get.to(() => StatisticsScreen());
+              },
+              leading: Icon(
+                Icons.analytics,
+                color: Colors.green,
+              ),
+              title: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  '통계',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.grey),
+              ),
+            ),
+            child: ListTile(
+              onTap: () {
+                Get.back();
                 Get.to(() => MyPageScreen());
               },
               leading: Icon(

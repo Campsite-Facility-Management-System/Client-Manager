@@ -35,98 +35,6 @@ class StatisticsScreen extends StatelessWidget {
               children: [
                 SizedBox(height: 10),
                 Text(
-                  '<전력 총사용량>',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                stController.electric == null
-                    ? Center(child: CircularProgressIndicator())
-                    : AspectRatio(
-                        aspectRatio: 1.5,
-                        child: Container(
-                          margin:
-                              EdgeInsets.only(left: 10, right: 40, bottom: 20),
-                          child: GetBuilder<StController>(
-                            builder: (_) {
-                              return LineChart(
-                                LineChartData(
-                                  gridData: FlGridData(
-                                    show: false,
-                                    drawVerticalLine: true,
-                                    getDrawingHorizontalLine: (value) {
-                                      return FlLine(
-                                        color: Colors.white,
-                                        strokeWidth: 1,
-                                      );
-                                    },
-                                    getDrawingVerticalLine: (value) {
-                                      return FlLine(
-                                        color: Colors.white,
-                                        strokeWidth: 1,
-                                      );
-                                    },
-                                  ),
-                                  titlesData: FlTitlesData(
-                                    rightTitles: SideTitles(
-                                      showTitles: false,
-                                    ),
-                                    topTitles: SideTitles(
-                                      showTitles: false,
-                                    ),
-                                    leftTitles: SideTitles(
-                                      showTitles: true,
-                                      reservedSize: 50,
-                                      margin: 2,
-                                      interval: 1,
-                                      getTitles: (value) {
-                                        if (value.toInt() == 0) {
-                                          return '0w';
-                                        }
-
-                                        if (value.toInt() ==
-                                            stController.max.value.toInt()) {
-                                          return stController.max.value
-                                                  .toString() +
-                                              'w';
-                                        }
-
-                                        return '';
-                                      },
-                                    ),
-                                  ),
-                                  borderData: FlBorderData(
-                                    show: true,
-                                    border: Border.all(
-                                        color: Colors.green, width: 1),
-                                  ),
-                                  minX: 0,
-                                  maxX: 13,
-                                  minY: -2,
-                                  maxY: stController.max.value < 100
-                                      ? 100
-                                      : stController.max.value * 1.2,
-                                  lineBarsData: [
-                                    LineChartBarData(
-                                      spots: stController.electric,
-                                      isCurved: false,
-                                      barWidth: 5,
-                                      dotData: FlDotData(
-                                        show: true,
-                                      ),
-                                      belowBarData: BarAreaData(
-                                        show: false,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                SizedBox(height: 10),
-                Text(
                   '<물품 인기도>',
                   style: TextStyle(
                     fontSize: 20,
@@ -169,7 +77,7 @@ class StatisticsScreen extends StatelessWidget {
                                 children: const <Widget>[
                                   Indicator(
                                     color: Color(0xff0293ee),
-                                    text: '1위 물품',
+                                    text: '1위 장작',
                                     isSquare: true,
                                   ),
                                   SizedBox(
@@ -177,7 +85,7 @@ class StatisticsScreen extends StatelessWidget {
                                   ),
                                   Indicator(
                                     color: Color(0xfff8b250),
-                                    text: '2위 물품',
+                                    text: '2위 장갑',
                                     isSquare: true,
                                   ),
                                   SizedBox(
@@ -185,7 +93,7 @@ class StatisticsScreen extends StatelessWidget {
                                   ),
                                   Indicator(
                                     color: Color(0xff845bef),
-                                    text: '3위 물품',
+                                    text: '3위 텐트',
                                     isSquare: true,
                                   ),
                                   SizedBox(
@@ -193,7 +101,7 @@ class StatisticsScreen extends StatelessWidget {
                                   ),
                                   Indicator(
                                     color: Color(0xff13d38e),
-                                    text: '기타 물품',
+                                    text: '기타',
                                     isSquare: true,
                                   ),
                                   SizedBox(
@@ -253,7 +161,7 @@ class StatisticsScreen extends StatelessWidget {
                                 children: const <Widget>[
                                   Indicator(
                                     color: Color(0xff0293ee),
-                                    text: '1위 카테고리',
+                                    text: '1위 글램핑',
                                     isSquare: true,
                                   ),
                                   SizedBox(
@@ -261,7 +169,7 @@ class StatisticsScreen extends StatelessWidget {
                                   ),
                                   Indicator(
                                     color: Color(0xfff8b250),
-                                    text: '2위 카테고리',
+                                    text: '2위 오토캠핑',
                                     isSquare: true,
                                   ),
                                   SizedBox(
@@ -269,7 +177,7 @@ class StatisticsScreen extends StatelessWidget {
                                   ),
                                   Indicator(
                                     color: Color(0xff845bef),
-                                    text: '3위 카테고리',
+                                    text: '3위 차박',
                                     isSquare: true,
                                   ),
                                   SizedBox(
@@ -277,7 +185,7 @@ class StatisticsScreen extends StatelessWidget {
                                   ),
                                   Indicator(
                                     color: Color(0xff13d38e),
-                                    text: '기타 카테고리',
+                                    text: '기타',
                                     isSquare: true,
                                   ),
                                   SizedBox(

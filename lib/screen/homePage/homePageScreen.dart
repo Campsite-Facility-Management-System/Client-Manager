@@ -106,20 +106,20 @@ class HomePageScreen extends StatelessWidget {
                             return Stack(
                               children: [
                                 campImg(Env.url + campList[index]['img_url']),
-                                Positioned(
-                                  top: 0,
-                                  right: 15,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Get.to(() => StatisticsScreen());
-                                    },
-                                    icon: Icon(
-                                      Icons.analytics,
-                                      color: Colors.green,
-                                      size: 40,
-                                    ),
-                                  ),
-                                ),
+                                // Positioned(
+                                //   top: 0,
+                                //   right: 15,
+                                //   child: IconButton(
+                                //     onPressed: () {
+                                //       Get.to(() => StatisticsScreen());
+                                //     },
+                                //     icon: Icon(
+                                //       Icons.analytics,
+                                //       color: Colors.green,
+                                //       size: 40,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             );
                           },
