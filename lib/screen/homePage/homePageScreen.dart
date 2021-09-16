@@ -10,6 +10,7 @@ import 'package:client_manager/screen/campManagement/addCategoryScreen.dart';
 import 'package:client_manager/screen/campManagement/addDeviceScreen.dart';
 import 'package:client_manager/screen/electric/electricScreen.dart';
 import 'package:client_manager/screen/itemManagement/addBuyScreen.dart';
+import 'package:client_manager/screen/statistics/statisticsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -53,20 +54,22 @@ class HomePageScreen extends StatelessWidget {
                                 .value[homePageController.page.value]['id']
                                 .toString();
                             switch (homePageController.tab.value) {
-                              case 0: 
+                              case 0:
                                 electricController.apiElectricCategoryList();
                                 break;
-                              case 1: 
-                                itemController.apiGoodsList(homePageController.selectedCampId.value);
+                              case 1:
+                                itemController.apiGoodsList(
+                                    homePageController.selectedCampId.value);
                                 break;
-                              case 2: 
-                                rsvController.apiRsvList(homePageController.selectedCampId.value);
+                              case 2:
+                                rsvController.apiRsvList(
+                                    homePageController.selectedCampId.value);
                                 break;
-                              case 3: 
-                                orderController.apiOrderList(homePageController.selectedCampId.value);
+                              case 3:
+                                orderController.apiOrderList(
+                                    homePageController.selectedCampId.value);
                                 break;
                             }
-                            
                           }
                           return;
                         },
@@ -91,7 +94,8 @@ class HomePageScreen extends StatelessWidget {
                                     homePageController.selectedCampId);
                                 break;
                               case 3:
-                                await rsvController.apiRsvList(homePageController.selectedCampId);
+                                await rsvController.apiRsvList(
+                                    homePageController.selectedCampId);
                                 break;
                             }
                           },
@@ -102,19 +106,20 @@ class HomePageScreen extends StatelessWidget {
                             return Stack(
                               children: [
                                 campImg(Env.url + campList[index]['img_url']),
-                                // Positioned(
-                                //   top: 0,
-                                //   right: 15,
-                                //   child: IconButton(
-                                //     onPressed: () {
-                                //       //캠핑장 정보 수정
-                                //     },
-                                //     icon: Icon(
-                                //       Icons.settings,
-                                //       color: Colors.green,
-                                //     ),
-                                //   ),
-                                // ),
+                                Positioned(
+                                  top: 0,
+                                  right: 15,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Get.to(() => StatisticsScreen());
+                                    },
+                                    icon: Icon(
+                                      Icons.analytics,
+                                      color: Colors.green,
+                                      size: 40,
+                                    ),
+                                  ),
+                                ),
                               ],
                             );
                           },
@@ -213,7 +218,8 @@ class HomePageScreen extends StatelessWidget {
                                 child: InkWell(
                                   onTap: () async {
                                     homePageController.tab.value = 2;
-                                    await rsvController.apiRsvList(homePageController.selectedCampId);
+                                    await rsvController.apiRsvList(
+                                        homePageController.selectedCampId);
                                   },
                                   child: Container(
                                     color: homePageController.tab.value == 2
@@ -636,46 +642,60 @@ class HomePageScreen extends StatelessWidget {
 
   Widget reservationList() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: GetBuilder<RsvController>(builder: (_){
-        return ListView.separated(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: rsvController.rsvList.value == null? 0:
-        rsvController.rsvList.value.length,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+        margin: EdgeInsets.symmetric(vertical: 10),
+        child: GetBuilder<RsvController>(builder: (_) {
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: rsvController.rsvList.value == null
+                ? 0
+                : rsvController.rsvList.value.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('예약자: ' + rsvController.rsvList.value[index].userName.toString()),
-                    Text('예약기간: ' + rsvController.rsvList.value[index].startDate.toString() + ' ~ ' + rsvController.rsvList.value[index].endDate.toString()),
-                    Text('카테고리: ' + rsvController.rsvList.value[index].siteTypeName.toString()),
-                    Text('디바이스: '+ rsvController.rsvList.value[index].deviceName.toString()),
-                    Text('상태: ' + rsvController.rsvList.value[index].status.toString()),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('예약자: ' +
+                            rsvController.rsvList.value[index].userName
+                                .toString()),
+                        Text('예약기간: ' +
+                            rsvController.rsvList.value[index].startDate
+                                .toString() +
+                            ' ~ ' +
+                            rsvController.rsvList.value[index].endDate
+                                .toString()),
+                        Text('카테고리: ' +
+                            rsvController.rsvList.value[index].siteTypeName
+                                .toString()),
+                        Text('디바이스: ' +
+                            rsvController.rsvList.value[index].deviceName
+                                .toString()),
+                        Text('상태: ' +
+                            rsvController.rsvList.value[index].status
+                                .toString()),
+                      ],
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width / 4,
+                        child: CachedNetworkImage(
+                            imageUrl: Env.url +
+                                rsvController.rsvList.value[index].imgUrl
+                                    .toString())),
                   ],
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width/4,
-                  child: CachedNetworkImage(
-                    imageUrl: Env.url + rsvController.rsvList.value[index].imgUrl.toString())),
-              ],
-            ),
-
+              );
+            },
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
           );
-        },
-        separatorBuilder: (context, index) {
-          return Divider();
-        },
-      );
-      })
-    );
+        }));
   }
 
   Widget itemList() {
@@ -720,7 +740,7 @@ class HomePageScreen extends StatelessWidget {
                         Text(
                           '상태 : ' +
                               (orderController.orderList.value[index].status
-                                          .toString()),
+                                  .toString()),
                         ),
                       ],
                     ),

@@ -16,7 +16,8 @@ class MyPageScreen extends StatelessWidget {
   apiPointCharge() async {
     var headers = await token.read(key: 'token');
 
-    var request = http.MultipartRequest('POST', Uri.parse(Env.url + '/api/point/charge'));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(Env.url + '/api/point/charge'));
     request.fields.addAll({
       'point': input.toString(),
     });
@@ -32,8 +33,7 @@ class MyPageScreen extends StatelessWidget {
       Get.back();
       Get.back();
       Get.to(MyPageScreen());
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
@@ -43,19 +43,19 @@ class MyPageScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.green,
         leading: IconButton(
           onPressed: () {
             Get.back();
           },
           icon: Icon(Icons.arrow_back),
-          color: Colors.grey,
+          color: Colors.white,
         ),
         centerTitle: true,
         title: Text(
-          '마이페이지',
+          '포인트 충전소',
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
       ),
@@ -135,7 +135,7 @@ class MyPageScreen extends StatelessWidget {
                         child: Form(
                           child: TextFormField(
                             controller: charge_Point,
-                            onChanged: (text){
+                            onChanged: (text) {
                               input = text;
                             },
                             keyboardType: TextInputType.emailAddress,

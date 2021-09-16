@@ -3,6 +3,7 @@ import 'package:client_manager/getX/token/tokenGetX.dart';
 import 'package:client_manager/screen/homePage/homePageScreen.dart';
 import 'package:client_manager/screen/myPage/myPageScreen.dart';
 import 'package:client_manager/screen/notificationPage/notiPageScreen.dart';
+import 'package:client_manager/screen/statistics/statisticsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -95,40 +96,16 @@ class _MainFunctionState extends State<MainFunction> {
             child: ListTile(
               onTap: () {
                 Get.back();
-              },
-              leading: Icon(
-                Icons.home,
-                color: Colors.green,
-              ),
-              title: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  '메인',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-          ),
-          
-          Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.grey),
-              ),
-            ),
-            child: ListTile(
-              onTap: () {
-                Get.back();
                 Get.to(() => MyPageScreen());
               },
               leading: Icon(
-                Icons.more,
+                Icons.charging_station_rounded,
                 color: Colors.green,
               ),
               title: Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  '마이페이지',
+                  '포인트 충전소',
                   style: TextStyle(fontSize: 16),
                 ),
               ),
